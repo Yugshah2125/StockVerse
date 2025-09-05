@@ -4,7 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import "@/services/firebase"; // Force Firebase initialization
 import Navigation from "./components/Navigation";
+import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Portfolio from "./pages/Portfolio";
@@ -44,8 +46,8 @@ const App = () => {
             <Sonner />
             <BrowserRouter>
               <Routes>
-                {/* Auth Routes */}
-                <Route path="/" element={<Auth />} />
+                {/* Public Routes */}
+                <Route path="/" element={<Home />} />
                 <Route path="/auth" element={<Auth />} />
                 
                 {/* Protected App Routes */}

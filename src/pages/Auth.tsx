@@ -39,16 +39,29 @@ const Auth = () => {
     e.preventDefault();
     setError("");
     
-    if (!email || !password) {
-      setError("Please fill in all fields");
+    // Email validation
+    if (!email) {
+      setError("Email is required");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+    
+    // Password validation
+    if (!password) {
+      setError("Password is required");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
       return;
     }
     
     const success = await login(email, password);
-    if (success) {
-      navigate('/dashboard');
-    } else {
-      setError("Invalid credentials");
+    if (!success) {
+      setError("Invalid email or password. Please check your credentials.");
     }
   };
 
@@ -56,21 +69,45 @@ const Auth = () => {
     e.preventDefault();
     setError("");
     
-    if (!email || !password || !confirmPassword) {
-      setError("Please fill in all fields");
+    // Email validation
+    if (!email) {
+      setError("Email is required");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address");
       return;
     }
     
+    // Password validation
+    if (!password) {
+      setError("Password is required");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+    if (!/(?=.*[a-z])(?=.*[A-Z])|(?=.*\d)/.test(password)) {
+      setError("Password must contain at least one uppercase letter or number");
+      return;
+    }
+    
+    // Confirm password validation
+    if (!confirmPassword) {
+      setError("Please confirm your password");
+      return;
+    }
     if (password !== confirmPassword) {
       setError("Passwords don't match");
       return;
     }
     
-    const success = await register(email, password);
-    if (success) {
-      navigate('/dashboard');
+    const result = await register(email, password);
+    if (!result.success) {
+      setError(result.error || "Registration failed");
     } else {
-      setError("Registration failed");
+      navigate('/dashboard');
     }
   };
 
@@ -84,9 +121,7 @@ const Auth = () => {
           
           <div className="relative z-10 space-y-6">
             <div className="flex items-center gap-3 animate-float">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-white" />
-              </div>
+              <img src="/src/assets/logo.png" alt="StockVerse" className="h-12 w-auto" />
               <h1 className="text-2xl font-bold">StockVerse</h1>
             </div>
 

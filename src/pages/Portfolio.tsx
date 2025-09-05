@@ -36,7 +36,7 @@ const Portfolio = () => {
 
   if (!portfolio) return null;
 
-  const { cash, holdings, totalValue, totalReturn, returnPercent } = portfolio;
+  const { cash = 0, holdings = [], totalValue = 0, totalReturn = 0, returnPercent = 0 } = portfolio;
 
   return (
     <div className="min-h-screen bg-background p-4 lg:p-6 lg:pl-78">
@@ -62,7 +62,7 @@ const Portfolio = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p className="text-3xl font-bold">${totalValue.toLocaleString()}</p>
+                <p className="text-3xl font-bold">₹{totalValue.toLocaleString()}</p>
                 <div className={`flex items-center gap-1 text-sm font-medium ${
                   totalReturn >= 0 ? 'text-profit' : 'text-loss'
                 }`}>
@@ -72,7 +72,7 @@ const Portfolio = () => {
                     <TrendingDown className="w-4 h-4" />
                   )}
                   <span>
-                    {totalReturn >= 0 ? '+' : ''}${totalReturn.toFixed(2)} ({totalReturn >= 0 ? '+' : ''}{returnPercent.toFixed(2)}%)
+                    {totalReturn >= 0 ? '+' : ''}₹{totalReturn.toFixed(2)} ({totalReturn >= 0 ? '+' : ''}{returnPercent.toFixed(2)}%)
                   </span>
                 </div>
               </div>
@@ -103,7 +103,7 @@ const Portfolio = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p className="text-3xl font-bold text-gold">${cash.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-gold">₹{cash.toLocaleString()}</p>
                 <p className="text-sm text-muted-foreground">Ready to invest</p>
               </div>
             </CardContent>
@@ -129,7 +129,7 @@ const Portfolio = () => {
               <div className="space-y-4">
                 {holdings.map((holding) => {
                   const isPositive = holding.totalReturn >= 0;
-                  const allocation = (holding.totalValue / totalValue) * 100;
+                  const allocation = totalValue > 0 ? (holding.totalValue / totalValue) * 100 : 0;
                   
                   return (
                     <div key={holding.symbol} className="p-4 rounded-lg border border-border hover:border-primary/30 transition-colors">
@@ -140,12 +140,12 @@ const Portfolio = () => {
                           </div>
                           <div>
                             <h3 className="font-semibold text-lg">{holding.symbol}</h3>
-                            <p className="text-sm text-muted-foreground">{holding.shares} shares @ ${holding.avgPrice.toFixed(2)}</p>
+                            <p className="text-sm text-muted-foreground">{holding.shares || 0} shares @ ₹{(holding.avgPrice || 0).toFixed(2)}</p>
                           </div>
                         </div>
                         
                         <div className="text-right">
-                          <p className="font-bold text-lg">${holding.totalValue.toLocaleString()}</p>
+                          <p className="font-bold text-lg">₹{(holding.totalValue || 0).toLocaleString()}</p>
                           <div className={`flex items-center gap-1 text-sm font-medium ${
                             isPositive ? 'text-profit' : 'text-loss'
                           }`}>
@@ -155,7 +155,7 @@ const Portfolio = () => {
                               <TrendingDown className="w-3 h-3" />
                             )}
                             <span>
-                              {isPositive ? '+' : ''}${holding.totalReturn.toFixed(2)} ({isPositive ? '+' : ''}{holding.returnPercent.toFixed(2)}%)
+                              {isPositive ? '+' : ''}₹{(holding.totalReturn || 0).toFixed(2)} ({isPositive ? '+' : ''}{(holding.returnPercent || 0).toFixed(2)}%)
                             </span>
                           </div>
                         </div>
@@ -164,11 +164,11 @@ const Portfolio = () => {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
                           <p className="text-muted-foreground">Avg Price</p>
-                          <p className="font-medium">${holding.avgPrice.toFixed(2)}</p>
+                          <p className="font-medium">₹{(holding.avgPrice || 0).toFixed(2)}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Current Price</p>
-                          <p className="font-medium">${holding.currentPrice.toFixed(2)}</p>
+                          <p className="font-medium">₹{(holding.currentPrice || 0).toFixed(2)}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Allocation</p>

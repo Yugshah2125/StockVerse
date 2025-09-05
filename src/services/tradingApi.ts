@@ -43,21 +43,35 @@ export const tradingApi = {
   // Get current portfolio
   async getPortfolio(): Promise<Portfolio> {
     try {
-      const { backendApi } = await import('@/services/backendApi');
-      return await backendApi.getPortfolio();
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.id) throw new Error('No user');
+      
+      const { firebaseApi } = await import('@/services/firebaseApi');
+      return await firebaseApi.getPortfolio(user.id);
     } catch (error) {
-      console.error('Portfolio error:', error);
-      return fallbackPortfolio;
+      return {
+        cash: 0,
+        holdings: [],
+        totalValue: 0,
+        totalReturn: 0,
+        returnPercent: 0,
+        trades: []
+      };
     }
   },
 
   // Buy stock
   async buyStock(symbol: string, shares: number): Promise<{ success: boolean; message: string; trade?: Trade }> {
     try {
-      const { backendApi } = await import('@/services/backendApi');
-      return await backendApi.buyStock(symbol, shares);
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.id) throw new Error('No user');
+      
+      const { stockApi } = await import('@/services/stockApi');
+      const stock = await stockApi.getQuote(symbol);
+      
+      const { firebaseApi } = await import('@/services/firebaseApi');
+      return await firebaseApi.buyStock(user.id, symbol, shares, stock.price);
     } catch (error) {
-      console.error('Buy stock error:', error);
       return { success: false, message: 'Failed to execute trade' };
     }
   },
@@ -65,16 +79,21 @@ export const tradingApi = {
   // Sell stock
   async sellStock(symbol: string, shares: number): Promise<{ success: boolean; message: string; trade?: Trade }> {
     try {
-      const { backendApi } = await import('@/services/backendApi');
-      return await backendApi.sellStock(symbol, shares);
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.id) throw new Error('No user');
+      
+      const { stockApi } = await import('@/services/stockApi');
+      const stock = await stockApi.getQuote(symbol);
+      
+      const { firebaseApi } = await import('@/services/firebaseApi');
+      return await firebaseApi.sellStock(user.id, symbol, shares, stock.price);
     } catch (error) {
-      console.error('Sell stock error:', error);
       return { success: false, message: 'Failed to execute trade' };
     }
   },
 
   // Get trade history
   async getTradeHistory(): Promise<Trade[]> {
-    return fallbackPortfolio.trades;
+    return [];
   }
 };

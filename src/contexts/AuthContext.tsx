@@ -35,13 +35,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
-      const { backendApi } = await import('@/services/backendApi');
-      const response = await backendApi.login(email, password);
-      
-      if (response.user && response.token) {
-        const userData = { ...response.user, token: response.token };
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
+      const { firebaseApi } = await import('@/services/firebaseApi');
+      const result = await firebaseApi.login(email, password);
+      if (result.user) {
+        setUser(result.user);
+        localStorage.setItem('user', JSON.stringify(result.user));
         return true;
       }
       return false;
@@ -53,22 +51,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const register = async (email: string, password: string): Promise<boolean> => {
+  const register = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     setIsLoading(true);
     try {
-      const { backendApi } = await import('@/services/backendApi');
-      const response = await backendApi.register(email, password);
-      
-      if (response.user && response.token) {
-        const userData = { ...response.user, token: response.token };
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-        return true;
+      const { firebaseApi } = await import('@/services/firebaseApi');
+      const result = await firebaseApi.register(email, password);
+      if (result.user) {
+        setUser(result.user);
+        localStorage.setItem('user', JSON.stringify(result.user));
+        return { success: true };
       }
-      return false;
-    } catch (error) {
+      return { success: false, error: 'Registration failed' };
+    } catch (error: any) {
       console.error('Register error:', error);
-      return false;
+      let errorMessage = 'Registration failed';
+      
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'Email is already registered. Try signing in instead.';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'Password is too weak. Use at least 6 characters.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address format.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      return { success: false, error: errorMessage };
     } finally {
       setIsLoading(false);
     }

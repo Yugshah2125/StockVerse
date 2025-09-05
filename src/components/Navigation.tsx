@@ -33,22 +33,19 @@ const Navigation = () => {
       path: "/portfolio", 
       label: "Portfolio", 
       icon: ChartBar,
-      description: "Your holdings",
-      badge: "+2.4%"
+      description: "Your holdings"
     },
     { 
       path: "/fantasy-league", 
       label: "Fantasy League", 
       icon: Trophy,
-      description: "Draft & compete",
-      badge: "Active"
+      description: "Draft & compete"
     },
     { 
       path: "/trading-challenge", 
       label: "Trading Challenge", 
       icon: Zap,
-      description: "Level up skills",
-      badge: "60%"
+      description: "Level up skills"
     },
     { 
       path: "/mini-games", 
@@ -60,8 +57,7 @@ const Navigation = () => {
       path: "/leaderboard", 
       label: "Leaderboard", 
       icon: Users,
-      description: "Global rankings",
-      badge: "#847"
+      description: "Global rankings"
     },
     { 
       path: "/profile", 
@@ -100,9 +96,7 @@ const Navigation = () => {
           {/* Logo */}
           <div className="mb-8">
             <NavLink to="/dashboard" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center group-hover:animate-glow">
-                <TrendingUp className="w-6 h-6 text-white" />
-              </div>
+              <img src="/src/assets/logo.png" alt="StockVerse" className="h-10 w-auto" />
               <div>
                 <h1 className="font-bold text-lg">StockVerse</h1>
                 <p className="text-xs text-muted-foreground">Virtual Trading Platform</p>
@@ -191,9 +185,7 @@ const Navigation = () => {
               className="flex items-center gap-3 group"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center group-hover:animate-glow">
-                <TrendingUp className="w-6 h-6 text-white" />
-              </div>
+              <img src="/src/assets/logo.png" alt="StockVerse" className="h-10 w-auto" />
               <div>
                 <h1 className="font-bold text-lg">StockVerse</h1>
                 <p className="text-xs text-muted-foreground">Virtual Trading Platform</p>

@@ -6,8 +6,8 @@ export const usePortfolio = () => {
   return useQuery({
     queryKey: ['portfolio'],
     queryFn: tradingApi.getPortfolio,
-    staleTime: 30 * 1000, // 30 seconds
-    refetchInterval: 60 * 1000, // Refetch every minute
+    staleTime: 0, // Always fresh
+    refetchInterval: 5 * 1000, // Refetch every 5 seconds
   });
 };
 

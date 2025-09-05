@@ -77,7 +77,7 @@ const Dashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-gold">${virtualCash.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-gold">₹{virtualCash.toLocaleString()}</p>
               <p className="text-xs text-muted-foreground mt-1">Available to trade</p>
             </CardContent>
           </Card>
@@ -91,10 +91,10 @@ const Dashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">${portfolioValue.toLocaleString()}</p>
+              <p className="text-2xl font-bold">₹{portfolioValue.toLocaleString()}</p>
               <div className="flex items-center gap-1 mt-1">
                 <TrendingUp className="w-3 h-3 text-profit" />
-                <p className="text-xs text-profit font-medium">+${totalReturn.toLocaleString()} ({totalReturnPercent}%)</p>
+                <p className="text-xs text-profit font-medium">+₹{totalReturn.toLocaleString()} ({totalReturnPercent}%)</p>
               </div>
             </CardContent>
           </Card>
@@ -107,7 +107,7 @@ const Dashboard = () => {
             <CardContent>
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-profit" />
-                <p className="text-2xl font-bold text-profit">+${dailyChange.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-profit">+₹{dailyChange.toLocaleString()}</p>
               </div>
               <p className="text-xs text-profit font-medium mt-1">+{dailyChangePercent}% today</p>
             </CardContent>
@@ -156,12 +156,12 @@ const Dashboard = () => {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Next Round Starts</span>
-                  <span className="font-medium text-primary">Tomorrow 9 AM</span>
+                  <span className="text-muted-foreground">Status</span>
+                  <span className="font-medium text-muted-foreground">Not available</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Current Rank</span>
-                  <span className="font-medium text-profit">Not ranked yet</span>
+                  <span className="text-muted-foreground">Database</span>
+                  <span className="font-medium text-muted-foreground">Not configured</span>
                 </div>
               </div>
               
@@ -195,14 +195,13 @@ const Dashboard = () => {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Current Challenge</span>
-                  <span className="font-medium text-profit">Sector Rotation Pro</span>
+                  <span className="text-muted-foreground">Status</span>
+                  <span className="font-medium text-muted-foreground">Not available</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Progress</span>
-                  <span className="font-medium">0 / 5 targets</span>
+                  <span className="text-muted-foreground">Database</span>
+                  <span className="font-medium text-muted-foreground">Not configured</span>
                 </div>
-                <Progress value={0} className="h-2" />
               </div>
               
               <Button variant="profit" size="lg" className="w-full" asChild>
@@ -310,7 +309,7 @@ const Dashboard = () => {
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">{stock.name}</p>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xl font-bold">${stock.price.toFixed(2)}</span>
+                      <span className="text-xl font-bold">₹{stock.price.toFixed(2)}</span>
                       <div className={`flex items-center gap-1 text-sm ${
                         stock.change >= 0 ? 'text-profit' : 'text-loss'
                       }`}>
@@ -319,7 +318,7 @@ const Dashboard = () => {
                         ) : (
                           <TrendingDown className="w-3 h-3" />
                         )}
-                        <span>{stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}</span>
+                        <span>{stock.change >= 0 ? '+' : ''}₹{stock.change.toFixed(2)}</span>
                       </div>
                     </div>
                     <Button 
