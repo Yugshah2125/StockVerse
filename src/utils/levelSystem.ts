@@ -21,21 +21,34 @@ export const getXPRequiredForLevel = (level: number): number => {
 };
 
 export const calculateLevelInfo = (totalXP: number): LevelInfo => {
-  let level = 1;
+  // Clamp XP to prevent negative values
+  const clampedXP = Math.max(0, totalXP);
   
-  while (getXPRequiredForLevel(level + 1) <= totalXP) {
+  // Optimized level calculation using mathematical formula
+  // Based on XP formula: (level - 1) * 1000 + Math.floor((level - 1) * 200)
+  // Simplified to: level * 1200 - 1200
+  // Solving for level: level = (clampedXP + 1200) / 1200
+  let level = Math.max(1, Math.floor((clampedXP + 1200) / 1200));
+  
+  // Fine-tune level calculation for edge cases
+  while (level > 1 && getXPRequiredForLevel(level) > clampedXP) {
+    level--;
+  }
+  while (getXPRequiredForLevel(level + 1) <= clampedXP) {
     level++;
   }
   
   const xpForCurrentLevel = getXPRequiredForLevel(level);
   const xpForNextLevel = getXPRequiredForLevel(level + 1);
-  const xpInCurrentLevel = totalXP - xpForCurrentLevel;
-  const xpNeededForNext = xpForNextLevel - totalXP;
-  const progressPercent = (xpInCurrentLevel / (xpForNextLevel - xpForCurrentLevel)) * 100;
+  const xpInCurrentLevel = clampedXP - xpForCurrentLevel;
+  const xpNeededForNext = xpForNextLevel - clampedXP;
+  const progressPercent = Math.min(100, Math.max(0, 
+    (xpInCurrentLevel / (xpForNextLevel - xpForCurrentLevel)) * 100
+  ));
   
   return {
     level,
-    currentXP: totalXP,
+    currentXP: clampedXP,
     xpForCurrentLevel,
     xpForNextLevel,
     xpInCurrentLevel,

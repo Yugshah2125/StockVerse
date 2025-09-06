@@ -35,8 +35,26 @@ const RapidFireChallenge = ({ onBack }: RapidFireChallengeProps) => {
     setQuestions(shuffled.slice(0, totalQuestions));
   }, []);
 
-  const nextQuestion = useCallback(() => {
+  const nextQuestion = useCallback(async () => {
     if (currentQuestion + 1 >= totalQuestions) {
+      // Award XP when challenge is completed
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (user.id) {
+          const { xpService } = await import('@/services/xpService');
+          const percentage = Math.round((score / totalQuestions) * 100);
+          const baseXP = 20;
+          const bonusXP = Math.floor(percentage / 10); // 1 bonus XP per 10% accuracy
+          
+          await xpService.awardXP(user.id, {
+            amount: baseXP + bonusXP,
+            reason: `Rapid Fire Challenge completed (${percentage}% accuracy)`,
+            category: 'challenge'
+          });
+        }
+      } catch (error) {
+        console.error('Failed to award XP:', error);
+      }
       setGameState('finished');
     } else {
       setCurrentQuestion(prev => prev + 1);
@@ -44,7 +62,7 @@ const RapidFireChallenge = ({ onBack }: RapidFireChallengeProps) => {
       setSelectedAnswer(null);
       setShowResult(false);
     }
-  }, [currentQuestion, totalQuestions]);
+  }, [currentQuestion, totalQuestions, score]);
 
   useEffect(() => {
     if (gameState === 'playing' && timeLeft > 0 && selectedAnswer === null) {

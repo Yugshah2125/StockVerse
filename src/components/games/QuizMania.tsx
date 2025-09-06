@@ -47,12 +47,27 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
     setShowResult(true);
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer(null);
       setShowResult(false);
     } else {
+      // Award XP when quiz is completed
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (user.id) {
+          const { xpService } = await import('@/services/xpService');
+          const percentage = Math.round((score / questions.length) * 100);
+          const reward = percentage >= 80 ? 
+            { amount: 25, reason: 'Perfect quiz performance!', category: 'game' as const } :
+            { amount: 15, reason: 'Quiz completed', category: 'game' as const };
+          
+          await xpService.awardXP(user.id, reward);
+        }
+      } catch (error) {
+        console.error('Failed to award XP:', error);
+      }
       setGameComplete(true);
     }
   };
@@ -72,6 +87,8 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
 
   if (gameComplete) {
     const percentage = Math.round((score / questions.length) * 100);
+    const isExcellent = percentage >= 80;
+    const isGood = percentage >= 60;
     
     return (
       <motion.div 
@@ -128,9 +145,9 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
                     transition={{ delay: 0.8 }}
                     className="text-lg text-muted-foreground max-w-md mx-auto"
                   >
-                    {isExcellent ? "🎉 Excellent! You're a trading expert!" :
-                     isGood ? "👏 Good job! Keep learning!" :
-                     "📚 Keep studying and try again!"}
+                    {isExcellent ? "🎉 Excellent! You're a trading expert! (+25 XP)" :
+                     isGood ? "👏 Good job! Keep learning! (+15 XP)" :
+                     "📚 Keep studying and try again! (+15 XP)"}
                   </motion.p>
                 </div>
               </motion.div>

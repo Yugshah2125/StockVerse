@@ -135,15 +135,16 @@ export const firebaseApi = {
       return { success: false, message: `Insufficient funds. Need ₭${total.toLocaleString()}, have ₭${currentCash.toLocaleString()}` };
     }
     
-    const newXP = (userData?.xp || 0) + 10;
-    const { calculateLevelInfo } = await import('../utils/levelSystem');
-    const levelInfo = calculateLevelInfo(newXP);
-    const newLevel = levelInfo.level;
+    // Award XP for trading
+    const { xpService } = await import('./xpService');
+    const xpResult = await xpService.awardXP(userId, {
+      amount: 10,
+      reason: `Bought ${shares} shares of ${symbol}`,
+      category: 'trading'
+    });
     
     await updateDoc(userRef, {
-      virtualCash: currentCash - total,
-      xp: newXP,
-      level: newLevel
+      virtualCash: currentCash - total
     });
     
     const holdingsQuery = query(collection(db, 'holdings'), where('userId', '==', userId), where('symbol', '==', symbol));
@@ -188,12 +189,15 @@ export const firebaseApi = {
     const userDoc = await getDoc(userRef);
     const userData = userDoc.data();
     const currentCash = userData?.virtualCash || 0;
-    const newXP = (userData?.xp || 0) + 10;
-    const { calculateLevelInfo } = await import('../utils/levelSystem');
-    const levelInfo = calculateLevelInfo(newXP);
-    const newLevel = levelInfo.level;
+    // Award XP for trading
+    const { xpService } = await import('./xpService');
+    const xpResult = await xpService.awardXP(userId, {
+      amount: 10,
+      reason: `Sold ${shares} shares of ${symbol}`,
+      category: 'trading'
+    });
     
-    await updateDoc(userRef, { virtualCash: currentCash + total, xp: newXP, level: newLevel });
+    await updateDoc(userRef, { virtualCash: currentCash + total });
     
     const newShares = holdingData.shares - shares;
     await updateDoc(doc(db, 'holdings', holdingDoc.id), { shares: newShares });
