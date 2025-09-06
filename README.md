@@ -38,3 +38,8 @@ npm run dev
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+
+## Demo Video 📹
+
+Watch the demo of the project here:  
+[Click to view the demo video]([https://drive.google.com/file/d/1a2B3cD4Efgh5IJklm6NOP7qrstuvWXY/view?usp=sharing](https://drive.google.com/file/d/1Oq2H09tD8JKShFTWtFyyP85uATvgKiis/view?usp=sharing))
