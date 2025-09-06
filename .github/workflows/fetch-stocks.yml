@@ -1,0 +1,26 @@
+name: Fetch Stock Prices
+
+on:
+  schedule:
+    - cron: '30 3 * * 1-5' # 9:00 AM IST on weekdays
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  fetch-stocks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install axios firebase-admin
+        
+      - name: Fetch and update stock prices
+        env:
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: node .github/scripts/fetch-stocks.js

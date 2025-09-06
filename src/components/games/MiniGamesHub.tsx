@@ -35,7 +35,6 @@ const MiniGamesHub = ({ onSelectGame }: MiniGamesHubProps) => {
       transition={{ duration: 0.5 }}
       className="space-y-8"
     >
-      {/* Header */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -45,15 +44,11 @@ const MiniGamesHub = ({ onSelectGame }: MiniGamesHubProps) => {
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r from-gold/20 to-gold/10 mb-4">
           <Trophy className="w-8 h-8 text-gold" />
         </div>
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent mb-3">
-          Mini Games Hub
-        </h2>
         <p className="text-lg text-muted-foreground max-w-md mx-auto">
           Challenge yourself, learn trading concepts, and earn rewards through interactive games!
         </p>
       </motion.div>
 
-      {/* Games Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         {games.map((game, index) => {
           const Icon = game.icon;
@@ -67,7 +62,6 @@ const MiniGamesHub = ({ onSelectGame }: MiniGamesHubProps) => {
               whileTap={{ scale: 0.98 }}
             >
               <Card className={`relative overflow-hidden bg-gradient-to-br ${game.color} ${game.borderColor} border-2 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer h-full`}>
-                {/* Decorative elements */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent rounded-full -translate-y-16 translate-x-16" />
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-12 -translate-x-12" />
                 

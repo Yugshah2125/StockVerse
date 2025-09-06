@@ -7,6 +7,8 @@ interface User {
   virtualCash: number;
   level: number;
   xp: number;
+  streak?: number;
+  createdAt?: string;
 }
 
 interface AuthContextType {
@@ -27,7 +29,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Check for existing session
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      const userData = JSON.parse(savedUser);
+      setUser(userData);
     }
     setIsLoading(false);
   }, []);

@@ -8,6 +8,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { usePortfolio } from "@/hooks/useTrading";
 import StockSearch from "@/components/StockSearch";
 import TradingModal from "@/components/TradingModal";
+import { FeatureLock } from "@/components/FeatureLock";
+import { calculateLevelInfo, getLevelTheme } from "@/utils/levelSystem";
 
 import { 
   TrendingUp, 
@@ -42,9 +44,8 @@ const Dashboard = () => {
   const totalReturnPercent = portfolio?.returnPercent || 0;
   const dailyChange = portfolio?.dailyChange || 0;
   const dailyChangePercent = portfolio?.dailyChangePercent || 0;
-  const level = user?.level || 1;
-  const xp = user?.xp || 0;
-  const xpToNext = (level * 1000) - xp;
+  const levelInfo = calculateLevelInfo(user?.xp || 0);
+  const levelTheme = getLevelTheme(levelInfo.level);
   const streak = user?.streak || 0;
 
   return (
@@ -62,9 +63,9 @@ const Dashboard = () => {
               <Flame className="w-3 h-3" />
               {streak} day streak
             </Badge>
-            <Badge variant="outline" className="gap-1 text-gold border-gold/30">
+            <Badge variant="outline" className={`gap-1 border-opacity-50 ${levelTheme.accent} border-current`}>
               <Medal className="w-3 h-3" />
-              Level {level}
+              Level {levelInfo.level}
             </Badge>
           </div>
         </div>
@@ -117,19 +118,19 @@ const Dashboard = () => {
           </Card>
 
           {/* Level Progress */}
-          <Card className="bg-gradient-to-br from-card to-card-hover border-border/50 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300">
+          <Card className={`bg-gradient-to-br ${levelTheme.bg} border-border/50 hover:shadow-lg ${levelTheme.glow} transition-all duration-300`}>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <Target className="w-4 h-4 text-gold" />
+                <Target className={`w-4 h-4 ${levelTheme.accent}`} />
                 Level Progress
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="font-bold">Level {level}</span>
-                <span className="text-muted-foreground">{xp}/{xpToNext} XP</span>
+                <span className="font-bold">Level {levelInfo.level}</span>
+                <span className="text-muted-foreground">{levelInfo.xpInCurrentLevel}/{levelInfo.xpForNextLevel - levelInfo.xpForCurrentLevel} XP</span>
               </div>
-              <Progress value={(xp / xpToNext) * 100} className="h-2" />
+              <Progress value={levelInfo.progressPercent} className="h-2" />
             </CardContent>
           </Card>
         </div>
@@ -177,43 +178,45 @@ const Dashboard = () => {
           </Card>
 
           {/* Trading Challenge */}
-          <Card className="bg-gradient-to-br from-profit/5 via-card to-card-hover border-profit/20 hover:shadow-xl hover:shadow-profit/20 transition-all duration-300 group">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-profit to-green-400 flex items-center justify-center group-hover:animate-profit-pulse">
-                    <Zap className="w-6 h-6 text-white" />
+          <FeatureLock featureKey="trading-challenge">
+            <Card className="bg-gradient-to-br from-profit/5 via-card to-card-hover border-profit/20 hover:shadow-xl hover:shadow-profit/20 transition-all duration-300 group">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-profit to-green-400 flex items-center justify-center group-hover:animate-profit-pulse">
+                      <Zap className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl">Trading Challenge</CardTitle>
+                      <CardDescription>Complete levels and earn rewards</CardDescription>
+                    </div>
                   </div>
-                  <div>
-                    <CardTitle className="text-xl">Trading Challenge</CardTitle>
-                    <CardDescription>Complete levels and earn rewards</CardDescription>
+                  <Badge variant="outline" className="gap-1 text-gold border-gold/30">
+                    <Medal className="w-3 h-3" />
+                    Pro Level
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Current Level</span>
+                    <span className="font-medium">Level {levelInfo.level}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Required</span>
+                    <span className="font-medium text-profit">Level 3+</span>
                   </div>
                 </div>
-                <Badge variant="outline" className="gap-1 text-gold border-gold/30">
-                  <Medal className="w-3 h-3" />
-                  Pro Level
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Status</span>
-                  <span className="font-medium text-muted-foreground">Not available</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Database</span>
-                  <span className="font-medium text-muted-foreground">Not configured</span>
-                </div>
-              </div>
-              
-              <Button variant="profit" size="lg" className="w-full" asChild>
-                <Link to="/trading-challenge">
-                  Continue Challenge
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+                
+                <Button variant="profit" size="lg" className="w-full" asChild>
+                  <Link to="/trading-challenge">
+                    Continue Challenge
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </FeatureLock>
         </div>
 
         {/* Mini Games & Quick Actions */}
@@ -233,7 +236,7 @@ const Dashboard = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <Button variant="gold" size="sm" className="w-full" asChild>
+              <Button variant="default" size="sm" className="w-full bg-gold hover:bg-gold/90 text-black font-medium" asChild>
                 <Link to="/mini-games">
                   Play Now
                 </Link>

@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "scenario": "You just made a 15% profit on a stock trade in one day. You're feeling confident and considering doubling your position size for the next trade.",
+    "options": [
+      "Double the position size to maximize gains",
+      "Stick to your original position sizing strategy",
+      "Take a break and analyze what made this trade successful"
+    ],
+    "correct": 2,
+    "explanation": "Taking time to analyze successful trades helps you understand what worked and avoid overconfidence bias. Doubling position size after one win can lead to dangerous risk-taking.",
+    "category": "Overconfidence"
+  },
+  {
+    "id": 2,
+    "scenario": "Your portfolio is down 8% this month, and you're feeling anxious about every market movement. You find yourself checking prices every few minutes.",
+    "options": [
+      "Check prices more frequently to stay informed",
+      "Set specific times to review your portfolio (e.g., once daily)",
+      "Sell everything to stop the emotional stress"
+    ],
+    "correct": 1,
+    "explanation": "Setting specific review times helps reduce anxiety and prevents emotional decision-making. Constant monitoring often leads to impulsive actions based on short-term fluctuations.",
+    "category": "Anxiety Management"
+  },
+  {
+    "id": 3,
+    "scenario": "You bought a stock at $50, and it's now at $45. The company just announced positive earnings, but the stock continues to drop due to market sentiment.",
+    "options": [
+      "Sell immediately to cut losses",
+      "Buy more shares since the fundamentals are strong",
+      "Review your original thesis and risk management plan"
+    ],
+    "correct": 2,
+    "explanation": "Always return to your original analysis and risk management plan. This helps you make rational decisions based on facts rather than emotions or market noise.",
+    "category": "Loss Management"
+  },
+  {
+    "id": 4,
+    "scenario": "You missed out on a stock that gained 25% after you decided not to buy it. Now you're considering chasing it at the higher price.",
+    "options": [
+      "Buy it now before it goes higher",
+      "Wait for a pullback to your original target price",
+      "Move on and focus on other opportunities"
+    ],
+    "correct": 2,
+    "explanation": "FOMO (Fear of Missing Out) can lead to poor decisions. There are always new opportunities in the market. Chasing stocks often results in buying at peaks.",
+    "category": "FOMO"
+  },
+  {
+    "id": 5,
+    "scenario": "You've had three losing trades in a row, each following your trading plan perfectly. You're starting to doubt your strategy.",
+    "options": [
+      "Abandon the strategy and try something new",
+      "Increase position sizes to recover losses faster",
+      "Continue following the plan and review performance over a longer timeframe"
+    ],
+    "correct": 2,
+    "explanation": "Three trades is too small a sample size to judge a strategy. Good trading plans account for losing streaks. Consistency and long-term thinking are key to success.",
+    "category": "Discipline"
+  }
+]

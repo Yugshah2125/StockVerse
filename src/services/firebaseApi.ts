@@ -28,7 +28,8 @@ export const firebaseApi = {
         virtualCash: 1000000, 
         level: 1, 
         xp: 0,
-        streak: 0
+        streak: 0,
+        createdAt: new Date().toISOString()
       } 
     };
   },
@@ -48,7 +49,8 @@ export const firebaseApi = {
         virtualCash: userData?.virtualCash || 1000000,
         level: userData?.level || 1,
         xp: userData?.xp || 0,
-        streak: userData?.streak || 0
+        streak: userData?.streak || 0,
+        createdAt: userData?.createdAt?.toDate?.()?.toISOString() || userData?.createdAt
       } 
     };
   },
@@ -68,6 +70,7 @@ export const firebaseApi = {
     const holdings = [];
     let totalHoldingsValue = 0;
     let totalInvested = 0;
+    let previousDayValue = 0;
     
     for (const holdingDoc of holdingsSnapshot.docs) {
       const holdingData = holdingDoc.data();
@@ -75,7 +78,9 @@ export const firebaseApi = {
       if (holdingData.shares <= 0) continue;
       
       const currentPrice = alphaVantageApi.getSimulatedPrice(holdingData.symbol);
+      const previousPrice = alphaVantageApi.getBaselinePrice(holdingData.symbol);
       const totalValue = holdingData.shares * currentPrice;
+      const previousValue = holdingData.shares * previousPrice;
       const invested = holdingData.shares * holdingData.avgPrice;
       const totalReturn = totalValue - invested;
       const returnPercent = (totalReturn / invested) * 100;
@@ -92,13 +97,19 @@ export const firebaseApi = {
       });
       
       totalHoldingsValue += totalValue;
+      previousDayValue += previousValue;
       totalInvested += invested;
     }
     
     const cash = userData?.virtualCash || 0;
     const totalPortfolioValue = cash + totalHoldingsValue;
+    const previousPortfolioValue = cash + previousDayValue;
     const totalPortfolioReturn = totalHoldingsValue - totalInvested;
     const totalReturnPercent = totalInvested > 0 ? (totalPortfolioReturn / totalInvested) * 100 : 0;
+    
+    // Calculate real daily P&L
+    const dailyChange = totalPortfolioValue - previousPortfolioValue;
+    const dailyChangePercent = previousPortfolioValue > 0 ? (dailyChange / previousPortfolioValue) * 100 : 0;
     
     return {
       cash,
@@ -106,8 +117,8 @@ export const firebaseApi = {
       totalValue: parseFloat(totalPortfolioValue.toFixed(2)),
       totalReturn: parseFloat(totalPortfolioReturn.toFixed(2)),
       returnPercent: parseFloat(totalReturnPercent.toFixed(2)),
-      dailyChange: parseFloat((totalPortfolioReturn * 0.1).toFixed(2)),
-      dailyChangePercent: parseFloat((totalReturnPercent * 0.1).toFixed(2))
+      dailyChange: parseFloat(dailyChange.toFixed(2)),
+      dailyChangePercent: parseFloat(dailyChangePercent.toFixed(2))
     };
   },
 
@@ -125,7 +136,9 @@ export const firebaseApi = {
     }
     
     const newXP = (userData?.xp || 0) + 10;
-    const newLevel = Math.floor(newXP / 1000) + 1;
+    const { calculateLevelInfo } = await import('../utils/levelSystem');
+    const levelInfo = calculateLevelInfo(newXP);
+    const newLevel = levelInfo.level;
     
     await updateDoc(userRef, {
       virtualCash: currentCash - total,
@@ -176,7 +189,9 @@ export const firebaseApi = {
     const userData = userDoc.data();
     const currentCash = userData?.virtualCash || 0;
     const newXP = (userData?.xp || 0) + 10;
-    const newLevel = Math.floor(newXP / 1000) + 1;
+    const { calculateLevelInfo } = await import('../utils/levelSystem');
+    const levelInfo = calculateLevelInfo(newXP);
+    const newLevel = levelInfo.level;
     
     await updateDoc(userRef, { virtualCash: currentCash + total, xp: newXP, level: newLevel });
     

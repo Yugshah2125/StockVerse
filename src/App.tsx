@@ -37,6 +37,15 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return user ? <>{children}</> : <Navigate to="/auth" replace />;
 };
 
+const AppLayout = ({ children }: { children: React.ReactNode }) => (
+  <div className="min-h-screen bg-background">
+    <Navigation />
+    <div className="lg:ml-72">
+      {children}
+    </div>
+  </div>
+);
+
 const App = () => {
   console.log('App component rendering...');
   try {
@@ -57,92 +66,65 @@ const App = () => {
                 {/* Protected App Routes */}
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-background">
-                      <Navigation />
-                      <div className="lg:ml-72">
-                        <Dashboard />
-                      </div>
-                    </div>
+                    <AppLayout>
+                      <Dashboard />
+                    </AppLayout>
                   </ProtectedRoute>
                 } />
                 <Route path="/portfolio" element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-background">
-                      <Navigation />
-                      <div className="lg:ml-72">
-                        <Portfolio />
-                      </div>
-                    </div>
+                    <AppLayout>
+                      <Portfolio />
+                    </AppLayout>
                   </ProtectedRoute>
                 } />
                 <Route path="/fantasy-league" element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-background">
-                      <Navigation />
-                      <div className="lg:ml-72">
-                        <FantasyLeague />
-                      </div>
-                    </div>
+                    <AppLayout>
+                      <FantasyLeague />
+                    </AppLayout>
                   </ProtectedRoute>
                 } />
                 <Route path="/trading-challenge" element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-background">
-                      <Navigation />
-                      <div className="lg:ml-72">
-                        <TradingChallenge />
-                      </div>
-                    </div>
+                    <AppLayout>
+                      <TradingChallenge />
+                    </AppLayout>
                   </ProtectedRoute>
                 } />
                 <Route path="/mini-games" element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-background">
-                      <Navigation />
-                      <div className="lg:ml-72">
-                        <MiniGames />
-                      </div>
-                    </div>
+                    <AppLayout>
+                      <MiniGames />
+                    </AppLayout>
                   </ProtectedRoute>
                 } />
                 <Route path="/leaderboard" element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-background">
-                      <Navigation />
-                      <div className="lg:ml-72">
-                        <Leaderboard />
-                      </div>
-                    </div>
+                    <AppLayout>
+                      <Leaderboard />
+                    </AppLayout>
                   </ProtectedRoute>
                 } />
                 <Route path="/transactions" element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-background">
-                      <Navigation />
-                      <div className="lg:ml-72">
-                        <TransactionsReports />
-                      </div>
-                    </div>
+                    <AppLayout>
+                      <TransactionsReports />
+                    </AppLayout>
                   </ProtectedRoute>
                 } />
                 <Route path="/education" element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-background">
-                      <Navigation />
-                      <div className="lg:ml-72">
-                        <FinancialEducation />
-                      </div>
-                    </div>
+                    <AppLayout>
+                      <FinancialEducation />
+                    </AppLayout>
                   </ProtectedRoute>
                 } />
                 <Route path="/profile" element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-background">
-                      <Navigation />
-                      <div className="lg:ml-72">
-                        <Profile />
-                      </div>
-                    </div>
+                    <AppLayout>
+                      <Profile />
+                    </AppLayout>
                   </ProtectedRoute>
                 } />
                 <Route path="*" element={<NotFound />} />

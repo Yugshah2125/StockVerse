@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "scenario": "📧 Email from: noreply@paypal-security.com\n\n⚠️ URGENT: Account Suspended\n\nYour PayPal account has been temporarily suspended due to unusual activity. Click here to verify your identity within 24 hours or your account will be permanently closed.\n\n[Verify Account Now] → bit.ly/pp-verify-2024",
+    "isScam": true,
+    "explanation": "🚨 Red flags: Suspicious sender domain, urgent language, shortened URL, and requesting immediate action. PayPal uses official domains and never threatens permanent closure via email."
+  },
+  {
+    "id": 2,
+    "scenario": "💬 WhatsApp Message from +1-555-0123:\n\n\"Hey! I found this amazing crypto investment opportunity. My friend made $50K in just 2 weeks! 🚀💰 You just need to send 0.1 BTC to get started. Want the link?\"",
+    "isScam": true,
+    "explanation": "🚨 Classic crypto scam: Unsolicited investment advice, unrealistic returns, upfront payment required, and pressure from 'friends' who made money."
+  },
+  {
+    "id": 3,
+    "scenario": "📱 SMS from Bank of America (555-0199):\n\n\"BOA ALERT: Suspicious $2,847 transaction detected on your account. If this wasn't you, reply STOP or call 1-800-432-1000 immediately to secure your account.\"",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Banks do send fraud alerts via SMS. The number matches BOA's official fraud line, and they're not asking for personal info - just to call their official number."
+  },
+  {
+    "id": 4,
+    "scenario": "💻 Pop-up on website:\n\n\"🎉 CONGRATULATIONS! 🎉\nYou're our 1,000,000th visitor today!\nYou've won a FREE iPhone 15 Pro!\nClaim your prize now - Limited time offer!\n\n[CLAIM NOW] [Close]\"",
+    "isScam": true,
+    "explanation": "🚨 Classic fake prize scam: No website tracks visitor numbers like this. These pop-ups lead to data harvesting or payment requests for 'shipping fees.'"
+  },
+  {
+    "id": 5,
+    "scenario": "📧 Email from: support@netflix.com\n\nSubject: Payment Failed - Update Required\n\nHi [Your Name],\n\nYour Netflix subscription payment couldn't be processed. Please update your payment method within 3 days to avoid service interruption.\n\n[Update Payment Method]\n\nThanks,\nThe Netflix Team",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Netflix domain, professional tone, reasonable timeframe, and directing to official account management. Netflix does send payment failure notifications."
+  }
+]

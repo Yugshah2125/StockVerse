@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
+import { useFeatureLock } from "@/hooks/useFeatureLock";
+import { useToast } from "@/hooks/use-toast";
 import { 
   LayoutDashboard, 
   Trophy, 
@@ -17,13 +19,17 @@ import {
   TrendingUp,
   LogOut,
   FileText,
-  GraduationCap
+  GraduationCap,
+  Lock
 } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
+import logo from "@/assets/logo.png";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { isLocked: isTradingChallengeLocked, requirement } = useFeatureLock('trading-challenge');
+  const { toast } = useToast();
 
   const navItems = [
     { 
@@ -48,7 +54,8 @@ const Navigation = () => {
       path: "/trading-challenge", 
       label: "Trading Challenge", 
       icon: Zap,
-      description: "Level up skills"
+      description: "Level up skills",
+      isLocked: isTradingChallengeLocked
     },
     { 
       path: "/mini-games", 
@@ -86,6 +93,17 @@ const Navigation = () => {
     logout();
   };
 
+  const handleLockedNavClick = (e: React.MouseEvent, item: { isLocked?: boolean }) => {
+    if (item.isLocked) {
+      e.preventDefault();
+      toast({
+        title: "Feature Locked",
+        description: requirement?.message || "This feature is locked",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <>
       {/* Mobile Menu Button */}
@@ -112,7 +130,7 @@ const Navigation = () => {
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <NavLink to="/dashboard" className="flex items-center gap-3 group">
-                <img src="/src/assets/logo.png" alt="StockVerse" className="h-10 w-auto" />
+                <img src={logo} alt="StockVerse" className="h-10 w-auto" />
                 <div>
                   <h1 className="font-bold text-lg">StockVerse</h1>
                   <p className="text-xs text-muted-foreground">Virtual Trading Platform</p>
@@ -131,12 +149,13 @@ const Navigation = () => {
                 <NavLink
                   key={item.path}
                   to={item.path}
+                  onClick={(e) => handleLockedNavClick(e, item)}
                   className={({ isActive }) =>
                     `flex items-center gap-3 p-3 rounded-lg transition-all duration-300 group ${
                       isActive
                         ? "bg-primary/10 text-primary border border-primary/20 shadow-md shadow-primary/10"
                         : "hover:bg-card-hover text-muted-foreground hover:text-foreground"
-                    }`
+                    } ${item.isLocked ? 'opacity-60' : ''}`
                   }
                 >
                   <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -144,6 +163,9 @@ const Navigation = () => {
                     <p className="font-medium truncate">{item.label}</p>
                     <p className="text-xs opacity-75 truncate">{item.description}</p>
                   </div>
+                  {item.isLocked && (
+                    <Lock className="w-4 h-4 text-muted-foreground" />
+                  )}
                   {item.badge && (
                     <Badge variant="secondary" className="text-xs">
                       {item.badge}
@@ -194,7 +216,7 @@ const Navigation = () => {
                 className="flex items-center gap-3 group"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <img src="/src/assets/logo.png" alt="StockVerse" className="h-10 w-auto" />
+                <img src={logo} alt="StockVerse" className="h-10 w-auto" />
                 <div>
                   <h1 className="font-bold text-lg">StockVerse</h1>
                   <p className="text-xs text-muted-foreground">Virtual Trading Platform</p>
@@ -213,13 +235,16 @@ const Navigation = () => {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    handleLockedNavClick(e, item);
+                    if (!item.isLocked) setIsMobileMenuOpen(false);
+                  }}
                   className={({ isActive }) =>
                     `flex items-center gap-3 p-3 rounded-lg transition-all duration-300 group ${
                       isActive
                         ? "bg-primary/10 text-primary border border-primary/20 shadow-md shadow-primary/10"
                         : "hover:bg-card-hover text-muted-foreground hover:text-foreground"
-                    }`
+                    } ${item.isLocked ? 'opacity-60' : ''}`
                   }
                 >
                   <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -227,6 +252,9 @@ const Navigation = () => {
                     <p className="font-medium truncate">{item.label}</p>
                     <p className="text-xs opacity-75 truncate">{item.description}</p>
                   </div>
+                  {item.isLocked && (
+                    <Lock className="w-4 h-4 text-muted-foreground" />
+                  )}
                   {item.badge && (
                     <Badge variant="secondary" className="text-xs">
                       {item.badge}

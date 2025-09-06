@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "question": "What is the fundamental principle behind diversification in investing?",
+    "options": ["Putting all money in one investment", "Spreading investments across different assets", "Only investing in stocks", "Avoiding all risks"],
+    "correct": 1,
+    "explanation": "Diversification means spreading your investments across different assets to reduce risk. The saying 'don't put all your eggs in one basket' perfectly captures this concept."
+  },
+  {
+    "id": 2,
+    "question": "What is compound interest often called?",
+    "options": ["Simple interest", "The eighth wonder of the world", "Basic math", "Quick money"],
+    "correct": 1,
+    "explanation": "Albert Einstein allegedly called compound interest 'the eighth wonder of the world' because your money earns returns, and those returns earn returns too, creating exponential growth over time."
+  },
+  {
+    "id": 3,
+    "question": "What is the relationship between risk and potential return in investing?",
+    "options": ["Higher risk, lower return", "No relationship", "Higher risk, higher potential return", "Lower risk, higher return"],
+    "correct": 2,
+    "explanation": "Generally, investments with higher risk offer the potential for higher returns. This is because investors demand compensation for taking on additional risk."
+  },
+  {
+    "id": 4,
+    "question": "What should be your first step before investing?",
+    "options": ["Buy popular stocks", "Create an emergency fund", "Invest in crypto", "Take a loan"],
+    "correct": 1,
+    "explanation": "Before investing, you should have an emergency fund covering 3-6 months of expenses. This ensures you won't need to sell investments during emergencies."
+  },
+  {
+    "id": 5,
+    "question": "What is dollar-cost averaging?",
+    "options": ["Buying expensive stocks", "Investing the same amount regularly", "Timing the market", "Buying only cheap stocks"],
+    "correct": 1,
+    "explanation": "Dollar-cost averaging involves investing a fixed amount regularly, regardless of market conditions. This strategy helps reduce the impact of market volatility."
+  }
+]

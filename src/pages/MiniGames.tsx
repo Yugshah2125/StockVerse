@@ -1,42 +1,56 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Gamepad2, Zap, Trophy } from "lucide-react";
+import { useState } from "react";
+import { Gamepad2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import MiniGamesHub from "@/components/games/MiniGamesHub";
+import QuizMania from "@/components/games/QuizMania";
+import SpotTheScam from "@/components/games/SpotTheScam";
 
 const MiniGames = () => {
+  const [currentGame, setCurrentGame] = useState<string | null>(null);
+
+  const handleSelectGame = (gameId: string) => {
+    setCurrentGame(gameId);
+  };
+
+  const handleBackToHub = () => {
+    setCurrentGame(null);
+  };
+
+  const renderGame = () => {
+    switch (currentGame) {
+      case 'quiz-mania':
+        return <QuizMania onBack={handleBackToHub} />;
+      case 'spot-the-scam':
+        return <SpotTheScam onBack={handleBackToHub} />;
+      default:
+        return <MiniGamesHub onSelectGame={handleSelectGame} />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background p-4 lg:p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-5xl mx-auto space-y-8">
+        {!currentGame && (
+          <div className="animate-slide-up">
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <Gamepad2 className="w-8 h-8 text-primary" />
+              Mini Games
+            </h1>
+            <p className="text-muted-foreground">Learn through interactive games and challenges</p>
+          </div>
+        )}
         
-        {/* Header */}
-        <div className="animate-slide-up">
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Gamepad2 className="w-8 h-8 text-gold" />
-            Mini-Games
-          </h1>
-          <p className="text-muted-foreground">Quick games and challenges</p>
-        </div>
-
-        {/* Empty State */}
-        <Card className="animate-slide-up">
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <Trophy className="w-6 h-6 text-primary" />
-              Game Center
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center py-12">
-              <Gamepad2 className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Games Coming Soon</h3>
-              <p className="text-muted-foreground mb-4">
-                Mini-games are not available yet. Check back later for exciting trading challenges!
-              </p>
-              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                <Zap className="w-4 h-4" />
-                <span>Feature under development</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentGame || 'hub'}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+          >
+            {renderGame()}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

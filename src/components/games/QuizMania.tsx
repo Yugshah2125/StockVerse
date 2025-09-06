@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Brain, CheckCircle, XCircle, RotateCcw, Info, Trophy, Sparkles, Target } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import educationalQuizData from '@/data/educationalQuizData.json';
+import quizData from '@/data/quizData.json';
 
 interface QuizManiaProps {
   onBack: () => void;
@@ -26,9 +26,8 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
   const [score, setScore] = useState(0);
   const [gameComplete, setGameComplete] = useState(false);
 
-  // Get 10 random questions without duplicates from educational pool
   const getRandomQuestions = () => {
-    const shuffled = [...educationalQuizData].sort(() => 0.5 - Math.random());
+    const shuffled = [...quizData].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 10);
   };
 
@@ -43,11 +42,8 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
 
   const handleSubmitAnswer = () => {
     if (selectedAnswer === null) return;
-    
     const isCorrect = selectedAnswer === questions[currentQuestion].correct;
-    if (isCorrect) {
-      setScore(score + 1);
-    }
+    if (isCorrect) setScore(score + 1);
     setShowResult(true);
   };
 
@@ -76,8 +72,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
 
   if (gameComplete) {
     const percentage = Math.round((score / questions.length) * 100);
-    const isExcellent = percentage >= 80;
-    const isGood = percentage >= 60;
     
     return (
       <motion.div 
@@ -86,19 +80,7 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
         transition={{ duration: 0.5 }}
         className="space-y-6"
       >
-        {/* Fixed Back Button */}
-        <div className="fixed top-4 left-4 z-50">
-          <motion.div 
-            whileHover={{ scale: 1.05, x: -2 }} 
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          >
-            <Button variant="ghost" size="sm" onClick={onBack} className="bg-background/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:bg-background/90">
-              <ArrowLeft className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:-translate-x-1" />
-              Back to Games
-            </Button>
-          </motion.div>
-        </div>
+
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -106,7 +88,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
           transition={{ delay: 0.2, duration: 0.6 }}
         >
           <Card className="relative overflow-hidden bg-gradient-to-br from-card via-card to-card-hover border-2 rounded-3xl shadow-2xl">
-            {/* Celebration Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-gold/5" />
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/10 to-transparent rounded-full -translate-y-32 translate-x-32" />
             
@@ -124,7 +105,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
               </CardTitle>
             </CardHeader>
             <CardContent className="relative z-10 space-y-8 text-center">
-              {/* Score Display */}
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -155,7 +135,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
                 </div>
               </motion.div>
 
-              {/* Action Buttons */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -200,7 +179,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
       transition={{ duration: 0.5 }}
       className="space-y-6"
     >
-      {/* Fixed Back Button */}
       <div className="fixed top-4 left-4 z-50">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button variant="ghost" size="sm" onClick={onBack} className="bg-background/80 backdrop-blur-sm shadow-lg">
@@ -210,7 +188,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
         </motion.div>
       </div>
 
-      {/* Progress Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -241,7 +218,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
         </div>
       </motion.div>
 
-      {/* Question Card */}
       <motion.div
         key={currentQuestion}
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -249,7 +225,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
         transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
       >
         <Card className="relative overflow-hidden bg-gradient-to-br from-card via-card to-card-hover border-2 rounded-3xl shadow-xl">
-          {/* Decorative Background */}
           <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-primary/5 to-transparent rounded-full -translate-y-24 translate-x-24" />
           
           <CardHeader className="relative z-10 pb-6">
@@ -262,7 +237,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
             </motion.div>
           </CardHeader>
           <CardContent className="relative z-10 space-y-6">
-            {/* Options */}
             <div className="space-y-4">
               {question.options.map((option, index) => {
                 const isCorrect = index === question.correct;
@@ -318,8 +292,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
                 );
               })}
             </div>
-
-            {/* Explanation */}
             <AnimatePresence>
               {showResult && (
                 <motion.div
@@ -358,8 +330,6 @@ const QuizMania = ({ onBack }: QuizManiaProps) => {
                 </motion.div>
               )}
             </AnimatePresence>
-
-            {/* Action Button */}
             <div className="flex justify-end pt-4">
               <motion.div 
                 whileHover={{ scale: 1.05 }} 

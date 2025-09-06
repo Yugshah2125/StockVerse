@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, GamepadIcon, Trophy, DollarSign } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import heroImage from "@/assets/hero-illustration.jpg";
+import logo from "@/assets/logo.png";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -121,7 +122,7 @@ const Auth = () => {
           
           <div className="relative z-10 space-y-6">
             <div className="flex items-center gap-3 animate-float">
-              <img src="/src/assets/logo.png" alt="StockVerse" className="h-12 w-auto" />
+              <img src={logo} alt="StockVerse" className="h-12 w-auto" />
               <h1 className="text-2xl font-bold">StockVerse</h1>
             </div>
 

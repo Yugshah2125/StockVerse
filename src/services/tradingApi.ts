@@ -2,12 +2,14 @@ import { stockApi } from './stockApi';
 
 export interface Trade {
   id: string;
+  userId?: string;
   symbol: string;
   type: 'buy' | 'sell';
   shares: number;
   price: number;
   total: number;
   timestamp: Date;
+  pnl?: number;
 }
 
 export interface Holding {
@@ -26,6 +28,8 @@ export interface Portfolio {
   totalValue: number;
   totalReturn: number;
   returnPercent: number;
+  dailyChange: number;
+  dailyChangePercent: number;
   trades: Trade[];
 }
 
@@ -36,20 +40,12 @@ let fallbackPortfolio: Portfolio = {
   totalValue: 0,
   totalReturn: 0,
   returnPercent: 0,
+  dailyChange: 0,
+  dailyChangePercent: 0,
   trades: []
 };
 
-export interface Trade {
-  id: string;
-  userId: string;
-  symbol: string;
-  type: 'buy' | 'sell';
-  shares: number;
-  price: number;
-  total: number;
-  timestamp: Date;
-  pnl?: number;
-}
+
 
 export const tradingApi = {
   // Get current portfolio
@@ -67,6 +63,8 @@ export const tradingApi = {
         totalValue: 0,
         totalReturn: 0,
         returnPercent: 0,
+        dailyChange: 0,
+        dailyChangePercent: 0,
         trades: []
       };
     }

@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Shield, CheckCircle, XCircle, RotateCcw, AlertTriangle, Info, Trophy, Sparkles, Target, Mail, MessageSquare } from "lucide-react";
+import { ArrowLeft, Shield, CheckCircle, XCircle, RotateCcw, Info, Trophy, Sparkles, Target } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import scamData from '@/data/spotTheScamData.json';
+import scamData from '@/data/scamData.json';
 
 interface SpotTheScamProps {
   onBack: () => void;
@@ -41,11 +41,8 @@ const SpotTheScam = ({ onBack }: SpotTheScamProps) => {
 
   const handleSubmitAnswer = () => {
     if (selectedAnswer === null) return;
-    
     const isCorrect = selectedAnswer === scenarios[currentScenario].isScam;
-    if (isCorrect) {
-      setScore(score + 1);
-    }
+    if (isCorrect) setScore(score + 1);
     setShowResult(true);
   };
 
@@ -74,16 +71,6 @@ const SpotTheScam = ({ onBack }: SpotTheScamProps) => {
 
   if (gameComplete) {
     const percentage = Math.round((score / scenarios.length) * 100);
-    const isExcellent = percentage >= 80;
-    const isGood = percentage >= 60;
-    
-    const safetyTips = [
-      { icon: Shield, text: "Always verify sender domains - check for official company domains" },
-      { icon: AlertTriangle, text: "Be suspicious of urgent requests for personal information" },
-      { icon: Mail, text: "Never click suspicious links - type URLs directly into your browser" },
-      { icon: Target, text: "Legitimate companies don't ask for passwords via email/text" },
-      { icon: CheckCircle, text: "When in doubt, contact the company through official channels" }
-    ];
     
     return (
       <motion.div 
@@ -92,18 +79,7 @@ const SpotTheScam = ({ onBack }: SpotTheScamProps) => {
         transition={{ duration: 0.5 }}
         className="space-y-6"
       >
-        <div className="fixed top-4 left-4 z-50">
-          <motion.div 
-            whileHover={{ scale: 1.05, x: -2 }} 
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          >
-            <Button variant="ghost" size="sm" onClick={onBack} className="bg-background/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:bg-background/90">
-              <ArrowLeft className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:-translate-x-1" />
-              Back to Games
-            </Button>
-          </motion.div>
-        </div>
+
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -156,42 +132,6 @@ const SpotTheScam = ({ onBack }: SpotTheScamProps) => {
                      "📚 Keep learning! Scammers are getting smarter - so should you!"}
                   </motion.p>
                 </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 0.5 }}
-              >
-                <Card className="text-left bg-gradient-to-br from-muted/50 to-muted/30 border-2 rounded-2xl">
-                  <CardHeader>
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center">
-                        <Shield className="w-5 h-5 text-white" />
-                      </div>
-                      Digital Safety Essentials
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {safetyTips.map((tip, index) => {
-                      const Icon = tip.icon;
-                      return (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 1.2 + index * 0.1 }}
-                          className="flex items-start gap-3 p-3 rounded-xl bg-background/50"
-                        >
-                          <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <Icon className="w-4 h-4 text-primary" />
-                          </div>
-                          <p className="text-sm leading-relaxed">{tip.text}</p>
-                        </motion.div>
-                      );
-                    })}
-                  </CardContent>
-                </Card>
               </motion.div>
 
               <motion.div
@@ -311,31 +251,16 @@ const SpotTheScam = ({ onBack }: SpotTheScamProps) => {
               className="relative"
             >
               <div className="bg-gradient-to-br from-background to-muted/30 rounded-2xl p-6 border-2 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-orange-500/20 to-red-500/20 flex items-center justify-center border border-orange-200/50">
-                    <MessageSquare className="w-6 h-6 text-orange-600" />
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm font-medium text-muted-foreground bg-muted/50 px-3 py-1 rounded-full">
-                        Scenario #{currentScenario + 1} of {scenarios.length}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        📱 Digital Communication
-                      </div>
-                    </div>
-                    <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-4 border border-border/50">
-                      <pre className="text-sm leading-relaxed font-mono whitespace-pre-wrap text-foreground">{scenario.scenario}</pre>
-                    </div>
-                  </div>
+                <div className="bg-gradient-to-br from-card to-card/50 rounded-xl p-4 border border-border/50">
+                  <pre className="text-sm leading-relaxed font-mono whitespace-pre-wrap text-foreground">{scenario.scenario}</pre>
                 </div>
               </div>
             </motion.div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { value: false, label: "✅ Legitimate", color: "from-green-500 to-emerald-600", bgColor: "from-green-50 to-emerald-50", hoverColor: "hover:from-green-100 hover:to-emerald-100", icon: CheckCircle },
-                { value: true, label: "🚨 Scam", color: "from-red-500 to-rose-600", bgColor: "from-red-50 to-rose-50", hoverColor: "hover:from-red-100 hover:to-rose-100", icon: XCircle }
+                { value: false, label: "✅ Legitimate", color: "from-green-500 to-emerald-600", bgColor: "from-green-50 to-emerald-50", icon: CheckCircle },
+                { value: true, label: "🚨 Scam", color: "from-red-500 to-rose-600", bgColor: "from-red-50 to-rose-50", icon: XCircle }
               ].map((option, index) => {
                 const isSelected = selectedAnswer === option.value;
                 const isCorrect = showResult && option.value === scenario.isScam;
@@ -362,7 +287,7 @@ const SpotTheScam = ({ onBack }: SpotTheScamProps) => {
                             : "opacity-50 scale-95"
                           : isSelected
                           ? `bg-gradient-to-br ${option.bgColor} border-current shadow-lg scale-105`
-                          : `hover:bg-muted/30 hover:shadow-lg hover:scale-102 ${option.hoverColor}`
+                          : `hover:bg-muted/30 hover:shadow-lg hover:scale-102`
                       }`}
                       onClick={() => handleAnswerSelect(option.value)}
                       disabled={showResult}
@@ -379,13 +304,10 @@ const SpotTheScam = ({ onBack }: SpotTheScamProps) => {
                             ? `bg-gradient-to-r ${option.color} border-transparent shadow-lg`
                             : "border-muted-foreground bg-background hover:border-primary/50"
                         }`}>
-                          {showResult && (isCorrect || isWrong) ? (
-                            <Icon className="w-7 h-7 text-white" />
-                          ) : (
-                            <Icon className={`w-7 h-7 transition-colors duration-300 ${
-                              isSelected ? "text-white" : "text-muted-foreground hover:text-primary"
-                            }`} />
-                          )}
+                          <Icon className={`w-7 h-7 transition-colors duration-300 ${
+                            showResult && (isCorrect || isWrong) ? "text-white" :
+                            isSelected ? "text-white" : "text-muted-foreground hover:text-primary"
+                          }`} />
                         </div>
                         <span className="font-bold text-lg text-center leading-tight">{option.label}</span>
                       </div>

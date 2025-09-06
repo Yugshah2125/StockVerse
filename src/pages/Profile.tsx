@@ -6,21 +6,20 @@ import { User, Settings, Trophy, LogOut, TrendingUp, Medal, Target, Calendar } f
 import { useAuth } from "@/contexts/AuthContext";
 import { usePortfolio } from "@/hooks/useTrading";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
+import { calculateLevelInfo, getLevelTheme } from "@/utils/levelSystem";
 
 const Profile = () => {
   const { user, logout } = useAuth();
   const { data: portfolio } = usePortfolio();
-  const { data: leaderboard } = useLeaderboard();
+  const { data: leaderboardData } = useLeaderboard();
   
-  const userLevel = user?.level || 1;
-  const userXP = user?.xp || 0;
-  const xpToNext = (userLevel * 1000) - userXP;
-  const xpProgress = (userXP / (userLevel * 1000)) * 100;
+  const levelInfo = calculateLevelInfo(user?.xp || 0);
+  const levelTheme = getLevelTheme(levelInfo.level);
   
-  const userRank = leaderboard?.find(entry => entry.id === user?.id)?.rank || 'Unranked';
-  const totalUsers = leaderboard?.length || 0;
+  const userRank = leaderboardData?.currentUserRank || 'Unranked';
+  const totalUsers = leaderboardData?.totalUsers || 0;
   
-  const joinDate = new Date(2024, 0, 1); // Mock join date
+  const joinDate = user?.createdAt ? new Date(user.createdAt) : new Date();
   const daysSinceJoin = Math.floor((Date.now() - joinDate.getTime()) / (1000 * 60 * 60 * 24));
 
   return (
@@ -53,22 +52,22 @@ const Profile = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-gold/5 via-card to-card-hover border-gold/20">
+          <Card className={`bg-gradient-to-br ${levelTheme.bg} border-opacity-30`}>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Medal className="w-5 h-5 text-gold" />
+                <Medal className={`w-5 h-5 ${levelTheme.accent}`} />
                 Level
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p className="text-3xl font-bold text-gold">{userLevel}</p>
+                <p className={`text-3xl font-bold ${levelTheme.accent}`}>{levelInfo.level}</p>
                 <div className="space-y-1">
                   <div className="flex justify-between text-sm">
                     <span>XP Progress</span>
-                    <span>{userXP}/{userLevel * 1000}</span>
+                    <span>{levelInfo.xpInCurrentLevel}/{levelInfo.xpForNextLevel - levelInfo.xpForCurrentLevel}</span>
                   </div>
-                  <Progress value={xpProgress} className="h-2" />
+                  <Progress value={levelInfo.progressPercent} className="h-2" />
                 </div>
               </div>
             </CardContent>

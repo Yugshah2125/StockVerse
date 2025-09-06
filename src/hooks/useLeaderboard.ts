@@ -1,7 +1,76 @@
-import { useQuery } from '@tanstack/react-query';
-import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
-import { db } from '@/services/firebase';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { leaderboardApi, LeaderboardUser, LeaderboardData } from '@/services/leaderboardApi';
 
+export const useLeaderboard = () => {
+  const { user } = useAuth();
+  const [data, setData] = useState<LeaderboardData>({
+    users: [],
+    currentUserRank: null,
+    totalUsers: 0,
+    hasMore: false
+  });
+  const [currentUserData, setCurrentUserData] = useState<LeaderboardUser | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadLeaderboard = async (reset: boolean = false) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const pageToLoad = reset ? 1 : currentPage + 1;
+      const startRank = (pageToLoad - 1) * 50 + 1;
+      const leaderboardData = await leaderboardApi.getLeaderboard(50, startRank);
+      
+      // Get current user rank if user is logged in
+      if (user?.id && leaderboardData.allUsers) {
+        const userRankData = await leaderboardApi.getCurrentUserRank(user.id, leaderboardData.allUsers);
+        leaderboardData.currentUserRank = userRankData.rank > 0 ? userRankData.rank : null;
+        setCurrentUserData(userRankData.user);
+      }
+
+      setData(prevData => ({
+        ...leaderboardData,
+        users: reset ? leaderboardData.users : [...prevData.users, ...leaderboardData.users]
+      }));
+      
+      setCurrentPage(pageToLoad);
+    } catch (err) {
+      setError('Failed to load leaderboard');
+      console.error('Leaderboard error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadMore = () => {
+    if (!isLoading && data.hasMore) {
+      loadLeaderboard(false);
+    }
+  };
+
+  const refresh = () => {
+    setCurrentPage(1);
+    loadLeaderboard(true);
+  };
+
+  useEffect(() => {
+    loadLeaderboard(true);
+  }, [user?.id]);
+
+  return {
+    data,
+    currentUserData,
+    isLoading,
+    error,
+    loadMore,
+    refresh
+  };
+};
+
+// Legacy interface for backward compatibility
 export interface LeaderboardEntry {
   id: string;
   name: string;
@@ -11,85 +80,3 @@ export interface LeaderboardEntry {
   level: number;
   rank: number;
 }
-
-const fetchLeaderboard = async (): Promise<LeaderboardEntry[]> => {
-  try {
-    // Get all users
-    const usersQuery = query(
-      collection(db, 'users'),
-      orderBy('virtualCash', 'desc'),
-      limit(50)
-    );
-    const usersSnapshot = await getDocs(usersQuery);
-    
-    const leaderboardData: LeaderboardEntry[] = [];
-    
-    for (const userDoc of usersSnapshot.docs) {
-      const userData = userDoc.data();
-      
-      // Get user's holdings to calculate portfolio value
-      const holdingsQuery = query(
-        collection(db, 'holdings'),
-        orderBy('shares', 'desc')
-      );
-      const holdingsSnapshot = await getDocs(holdingsQuery);
-      
-      let totalHoldingsValue = 0;
-      let totalInvested = 0;
-      
-      holdingsSnapshot.docs.forEach(holdingDoc => {
-        const holdingData = holdingDoc.data();
-        if (holdingData.userId === userDoc.id && holdingData.shares > 0) {
-          // Mock current price calculation
-          const basePrices: Record<string, number> = {
-            'RELIANCE': 2456.75,
-            'TCS': 3542.80,
-            'INFY': 1456.30,
-            'HDFCBANK': 1678.45
-          };
-          const currentPrice = basePrices[holdingData.symbol] || 2000;
-          const holdingValue = holdingData.shares * currentPrice;
-          const invested = holdingData.shares * holdingData.avgPrice;
-          
-          totalHoldingsValue += holdingValue;
-          totalInvested += invested;
-        }
-      });
-      
-      const cash = userData.virtualCash || 0;
-      const portfolioValue = cash + totalHoldingsValue;
-      const totalReturn = totalHoldingsValue - totalInvested;
-      const returnPercent = totalInvested > 0 ? (totalReturn / totalInvested) * 100 : 0;
-      
-      leaderboardData.push({
-        id: userDoc.id,
-        name: userData.name || 'Anonymous',
-        portfolioValue: Math.round(portfolioValue),
-        totalReturn: Math.round(totalReturn),
-        returnPercent: Math.round(returnPercent * 100) / 100,
-        level: userData.level || 1,
-        rank: 0 // Will be set after sorting
-      });
-    }
-    
-    // Sort by portfolio value and assign ranks
-    leaderboardData.sort((a, b) => b.portfolioValue - a.portfolioValue);
-    leaderboardData.forEach((entry, index) => {
-      entry.rank = index + 1;
-    });
-    
-    return leaderboardData;
-  } catch (error) {
-    console.error('Error fetching leaderboard:', error);
-    return [];
-  }
-};
-
-export const useLeaderboard = () => {
-  return useQuery({
-    queryKey: ['leaderboard'],
-    queryFn: fetchLeaderboard,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
-  });
-};
