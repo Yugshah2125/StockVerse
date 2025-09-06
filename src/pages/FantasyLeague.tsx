@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
-import { useTrendingStocks } from "@/hooks/useStocks";
+import { useFantasyLeague } from "@/hooks/useFantasyLeague";
+import { useAuth } from "@/contexts/AuthContext";
+import { alphaVantageApi } from '@/services/alphaVantageApi';
 import { 
   Trophy, 
   Clock, 
@@ -14,22 +16,33 @@ import {
   Target,
   Crown,
   Medal,
-  CheckCircle
+  CheckCircle,
+  Coins,
+  Star,
+  Zap
 } from "lucide-react";
 
 const FantasyLeague = () => {
-  const [selectedStocks, setSelectedStocks] = useState<string[]>([]);
-  const [isDrafted, setIsDrafted] = useState(false);
-  const { data: trendingStocks, isLoading } = useTrendingStocks();
+  const { user } = useAuth();
+  const [selectedLeague, setSelectedLeague] = useState(null);
+  const [selectedStocks, setSelectedStocks] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+  const { allLeagues, userDrafts, loading, submitDraft, getTimeRemaining } = useFantasyLeague();
   
   const maxSelections = 5;
-  const timeRemaining = "--:--:--";
 
-  // Use real stock data or fallback to empty array
-  const stocks = trendingStocks || [];
+  const handleLeagueSelect = (league) => {
+    setSelectedLeague(league);
+    const userDraft = userDrafts[league.id];
+    if (userDraft?.selectedStocks) {
+      setSelectedStocks(userDraft.selectedStocks);
+    } else {
+      setSelectedStocks([]);
+    }
+  };
 
-  const handleStockSelection = (symbol: string) => {
-    if (isDrafted) return;
+  const handleStockSelection = (symbol) => {
+    if (userDrafts[selectedLeague?.id]) return;
     
     if (selectedStocks.includes(symbol)) {
       setSelectedStocks(selectedStocks.filter(s => s !== symbol));
@@ -38,43 +51,131 @@ const FantasyLeague = () => {
     }
   };
 
-  const handleSubmitDraft = () => {
-    setIsDrafted(true);
+  const handleSubmitDraft = async () => {
+    if (!selectedLeague || selectedStocks.length !== maxSelections) return;
+    
+    setSubmitting(true);
+    try {
+      await submitDraft(selectedLeague.id, selectedStocks);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background p-4 lg:p-6 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="text-muted-foreground">Loading Fantasy Leagues...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!selectedLeague) {
+    return (
+      <div className="min-h-screen bg-background p-4 lg:p-6">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold flex items-center justify-center gap-3">
+              <Trophy className="w-10 h-10 text-gold" />
+              Fantasy Leagues
+            </h1>
+            <p className="text-muted-foreground text-lg">Choose your league and compete for massive prizes</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {allLeagues.map((league) => {
+              const isDrafted = !!userDrafts[league.id];
+              const difficultyColors = {
+                Easy: 'text-green-500 border-green-500/30 bg-green-500/5',
+                Medium: 'text-yellow-500 border-yellow-500/30 bg-yellow-500/5',
+                Hard: 'text-red-500 border-red-500/30 bg-red-500/5'
+              };
+              
+              return (
+                <Card key={league.id} className={`relative overflow-hidden transition-all duration-300 hover:shadow-xl ${isDrafted ? 'border-primary bg-primary/5' : 'hover:border-primary/50'}`}>
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-xl flex items-center gap-2">
+                        {league.name === 'Rookie League' && <Star className="w-5 h-5 text-green-500" />}
+                        {league.name === 'Pro League' && <Zap className="w-5 h-5 text-yellow-500" />}
+                        {league.name === 'Elite League' && <Crown className="w-5 h-5 text-red-500" />}
+                        {league.name}
+                      </CardTitle>
+                      {isDrafted && <CheckCircle className="w-5 h-5 text-primary" />}
+                    </div>
+                    <Badge variant="outline" className={difficultyColors[league.difficulty]}>
+                      {league.difficulty}
+                    </Badge>
+                  </CardHeader>
+                  
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-muted-foreground">Entry Fee</p>
+                        <p className="font-bold text-lg">₭{league.entryFee.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Prize Pool</p>
+                        <p className="font-bold text-lg text-gold">₭{league.prizePool.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Duration</p>
+                        <p className="font-bold">{league.duration} days</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Players</p>
+                        <p className="font-bold">{league.participants}/{league.maxParticipants}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-xs">
+                        <span>Time Remaining</span>
+                        <span className="font-mono">{getTimeRemaining(league)}</span>
+                      </div>
+                      <Progress value={(league.participants / league.maxParticipants) * 100} className="h-2" />
+                    </div>
+                    
+                    <Button 
+                      onClick={() => handleLeagueSelect(league)}
+                      className="w-full"
+                      variant={isDrafted ? "outline" : "default"}
+                      disabled={league.participants >= league.maxParticipants}
+                    >
+                      {isDrafted ? 'View Draft' : league.participants >= league.maxParticipants ? 'Full' : 'Join League'}
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const isDrafted = !!userDrafts[selectedLeague.id];
 
   return (
     <div className="min-h-screen bg-background p-4 lg:p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        
-        {/* Header */}
-        <div className="animate-slide-up">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-bold flex items-center gap-3">
-                <Trophy className="w-8 h-8 text-gold" />
-                Fantasy League
-              </h1>
-              <p className="text-muted-foreground">Draft your winning portfolio and compete against thousands</p>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <Badge variant="outline" className="gap-2 text-primary border-primary/30">
-                <Users className="w-4 h-4" />
-                Loading...
-              </Badge>
-              <Card className="px-4 py-2 bg-gradient-to-r from-loss/10 to-loss/5 border-loss/30">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-loss" />
-                  <span className="font-mono text-sm font-bold text-loss">{timeRemaining}</span>
-                </div>
-              </Card>
-            </div>
+        <div className="flex items-center gap-4">
+          <Button variant="outline" onClick={() => setSelectedLeague(null)}>
+            ← Back to Leagues
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold">{selectedLeague.name}</h1>
+            <p className="text-muted-foreground">Entry Fee: ₭{selectedLeague.entryFee.toLocaleString()} • Prize Pool: ₭{selectedLeague.prizePool.toLocaleString()}</p>
           </div>
         </div>
 
-        {/* Draft Status */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up">
-          <Card className="bg-gradient-to-br from-primary/5 via-card to-card-hover border-primary/20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Target className="w-5 h-5 text-primary" />
@@ -89,64 +190,61 @@ const FantasyLeague = () => {
                 </div>
                 <Progress value={(selectedStocks.length / maxSelections) * 100} className="h-3" />
                 <p className="text-xs text-muted-foreground">
-                  {isDrafted ? "Draft submitted successfully!" : `Select ${maxSelections - selectedStocks.length} more stocks`}
+                  {isDrafted ? "Draft submitted!" : `Select ${maxSelections - selectedStocks.length} more stocks`}
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-gold/5 via-card to-card-hover border-gold/20">
+          <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Crown className="w-5 h-5 text-gold" />
-                Prize Pool
+                <Coins className="w-5 h-5 text-gold" />
+                Your Kuberon
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p className="text-2xl font-bold text-gold">$50,000</p>
-                <p className="text-xs text-muted-foreground">Virtual currency prizes</p>
-                <div className="flex items-center gap-1 text-xs">
-                  <Medal className="w-3 h-3 text-gold" />
-                  <span>1st: $15k • 2nd: $10k • 3rd: $5k</span>
-                </div>
+                <p className="text-2xl font-bold">₭{user?.virtualCash?.toLocaleString() || '0'}</p>
+                <p className="text-xs text-muted-foreground">
+                  {user?.virtualCash >= selectedLeague.entryFee ? 'Sufficient funds' : 'Insufficient funds'}
+                </p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-profit/5 via-card to-card-hover border-profit/20">
+          <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-profit" />
-                Your Rank
+                <Users className="w-5 h-5 text-primary" />
+                League Stats
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p className="text-2xl font-bold text-muted-foreground">Not ranked</p>
-                <p className="text-xs text-muted-foreground">Join a round to get ranked</p>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <TrendingUp className="w-3 h-3" />
-                  <span>No data yet</span>
-                </div>
+                <p className="text-2xl font-bold">{selectedLeague.participants}/{selectedLeague.maxParticipants}</p>
+                <p className="text-xs text-muted-foreground">Players joined</p>
+                <p className="text-xs font-mono">{getTimeRemaining(selectedLeague)} left</p>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Stock Selection */}
-        <Card className="animate-slide-up">
+        <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-xl">Draft Your Portfolio</CardTitle>
-                <CardDescription>
-                  Select {maxSelections} stocks that you think will perform best in the next week
-                </CardDescription>
+                <CardDescription>Select {maxSelections} stocks for {selectedLeague.name}</CardDescription>
               </div>
               {selectedStocks.length === maxSelections && !isDrafted && (
-                <Button variant="gaming" size="lg" onClick={handleSubmitDraft}>
-                  Submit Draft
+                <Button 
+                  variant="gaming" 
+                  size="lg" 
+                  onClick={handleSubmitDraft}
+                  disabled={submitting || user?.virtualCash < selectedLeague.entryFee}
+                >
+                  {submitting ? 'Submitting...' : `Pay ₭${selectedLeague.entryFee.toLocaleString()} & Submit`}
                 </Button>
               )}
               {isDrafted && (
@@ -158,17 +256,27 @@ const FantasyLeague = () => {
             </div>
           </CardHeader>
           <CardContent>
-            {isLoading ? (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                <p className="text-muted-foreground">Loading live stock data...</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {stocks.map((stock) => {
+            <div className="space-y-4">
+              {[
+                { symbol: 'RELIANCE', name: 'Reliance Industries Ltd.' },
+                { symbol: 'TCS', name: 'Tata Consultancy Services Ltd.' },
+                { symbol: 'HDFCBANK', name: 'HDFC Bank Ltd.' },
+                { symbol: 'INFY', name: 'Infosys Ltd.' },
+                { symbol: 'ICICIBANK', name: 'ICICI Bank Ltd.' },
+                { symbol: 'HINDUNILVR', name: 'Hindustan Unilever Ltd.' },
+                { symbol: 'ITC', name: 'ITC Ltd.' },
+                { symbol: 'SBIN', name: 'State Bank of India' },
+                { symbol: 'BHARTIARTL', name: 'Bharti Airtel Ltd.' },
+                { symbol: 'KOTAKBANK', name: 'Kotak Mahindra Bank Ltd.' }
+              ].map((stock) => {
                 const isSelected = selectedStocks.includes(stock.symbol);
                 const canSelect = selectedStocks.length < maxSelections || isSelected;
-                const isPositive = stock.change > 0;
+                
+                const currentPrice = alphaVantageApi.getSimulatedPrice(stock.symbol);
+                const basePrice = alphaVantageApi.getBaselinePrice(stock.symbol);
+                const priceChange = currentPrice - basePrice;
+                const changePercent = basePrice > 0 ? (priceChange / basePrice) * 100 : 0;
+                const isPositive = priceChange >= 0;
                 
                 return (
                   <div
@@ -197,18 +305,13 @@ const FantasyLeague = () => {
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
                             <span className="font-bold text-lg">{stock.symbol}</span>
-                            <Badge variant="secondary" className="text-xs gap-1">
-                              <TrendingUp className="w-3 h-3" />
-                              Live Data
-                            </Badge>
                           </div>
                           <p className="text-sm text-muted-foreground">{stock.name}</p>
-                          <p className="text-xs text-muted-foreground">Vol: {stock.volume}</p>
                         </div>
                       </div>
                       
                       <div className="text-right space-y-1">
-                        <p className="text-lg font-bold">${stock.price}</p>
+                        <p className="text-lg font-bold">₭{currentPrice.toLocaleString()}</p>
                         <div className={`flex items-center gap-1 text-sm font-medium ${
                           isPositive ? 'text-profit' : 'text-loss'
                         }`}>
@@ -217,15 +320,14 @@ const FantasyLeague = () => {
                           ) : (
                             <TrendingDown className="w-3 h-3" />
                           )}
-                          <span>{isPositive ? '+' : ''}{stock.change} ({isPositive ? '+' : ''}{stock.changePercent}%)</span>
+                          <span>{isPositive ? '+' : ''}₭{priceChange.toFixed(2)} ({isPositive ? '+' : ''}{changePercent.toFixed(2)}%)</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 );
-                })}
-              </div>
-            )}
+              })}
+            </div>
           </CardContent>
         </Card>
       </div>

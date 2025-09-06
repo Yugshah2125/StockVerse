@@ -15,8 +15,11 @@ import {
   Menu,
   X,
   TrendingUp,
-  LogOut
+  LogOut,
+  FileText,
+  GraduationCap
 } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -60,6 +63,18 @@ const Navigation = () => {
       description: "Global rankings"
     },
     { 
+      path: "/transactions", 
+      label: "Transactions & Reports", 
+      icon: FileText,
+      description: "Trading history & analytics"
+    },
+    { 
+      path: "/education", 
+      label: "Financial Education", 
+      icon: GraduationCap,
+      description: "Learn budgeting & investing"
+    },
+    { 
       path: "/profile", 
       label: "Profile", 
       icon: User,
@@ -95,13 +110,16 @@ const Navigation = () => {
           
           {/* Logo */}
           <div className="mb-8">
-            <NavLink to="/dashboard" className="flex items-center gap-3 group">
-              <img src="/src/assets/logo.png" alt="StockVerse" className="h-10 w-auto" />
-              <div>
-                <h1 className="font-bold text-lg">StockVerse</h1>
-                <p className="text-xs text-muted-foreground">Virtual Trading Platform</p>
-              </div>
-            </NavLink>
+            <div className="flex items-center justify-between mb-4">
+              <NavLink to="/dashboard" className="flex items-center gap-3 group">
+                <img src="/src/assets/logo.png" alt="StockVerse" className="h-10 w-auto" />
+                <div>
+                  <h1 className="font-bold text-lg">StockVerse</h1>
+                  <p className="text-xs text-muted-foreground">Virtual Trading Platform</p>
+                </div>
+              </NavLink>
+              <ModeToggle />
+            </div>
           </div>
 
           {/* Navigation */}
@@ -149,16 +167,6 @@ const Navigation = () => {
                 </div>
               </div>
             </Card>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleSignOut}
-              className="w-full justify-start text-muted-foreground hover:text-loss"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
           </div>
         </div>
       </aside>
@@ -180,17 +188,20 @@ const Navigation = () => {
           
           {/* Logo */}
           <div className="mb-8">
-            <NavLink 
-              to="/dashboard" 
-              className="flex items-center gap-3 group"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <img src="/src/assets/logo.png" alt="StockVerse" className="h-10 w-auto" />
-              <div>
-                <h1 className="font-bold text-lg">StockVerse</h1>
-                <p className="text-xs text-muted-foreground">Virtual Trading Platform</p>
-              </div>
-            </NavLink>
+            <div className="flex items-center justify-between mb-4">
+              <NavLink 
+                to="/dashboard" 
+                className="flex items-center gap-3 group"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <img src="/src/assets/logo.png" alt="StockVerse" className="h-10 w-auto" />
+                <div>
+                  <h1 className="font-bold text-lg">StockVerse</h1>
+                  <p className="text-xs text-muted-foreground">Virtual Trading Platform</p>
+                </div>
+              </NavLink>
+              <ModeToggle />
+            </div>
           </div>
 
           {/* Navigation */}
@@ -239,16 +250,6 @@ const Navigation = () => {
                 </div>
               </div>
             </Card>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleSignOut}
-              className="w-full justify-start text-muted-foreground hover:text-loss"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
           </div>
         </div>
       </aside>

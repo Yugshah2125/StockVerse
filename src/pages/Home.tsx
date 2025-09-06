@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const Home = () => {
   const { data: trendingStocks, isLoading: isLoadingStocks } = useTrendingStocks();
@@ -47,6 +48,7 @@ const Home = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              <ModeToggle />
               <Button variant="outline" asChild>
                 <Link to="/auth">Sign In</Link>
               </Button>
@@ -75,15 +77,15 @@ const Home = () => {
             </h1>
             
             <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Trade NSE/BSE stocks with virtual money, compete in fantasy leagues, and climb leaderboards. 
-              <strong className="text-foreground"> No real money at risk!</strong>
+              Trade NSE/BSE stocks with Kuberon, compete in fantasy leagues, and climb leaderboards. 
+              <strong className="text-foreground"> No real Kuberon at risk!</strong>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
               <Button variant="hero" size="xl" className="gap-2" asChild>
                 <Link to="/auth">
                   <DollarSign className="w-5 h-5" />
-                  Claim ₹10L Free & Start
+                  Claim ₭10L Free & Start
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
@@ -95,8 +97,8 @@ const Home = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary mb-2">₹10,00,000</div>
-                <p className="text-sm text-muted-foreground">Starting Virtual Cash</p>
+                <div className="text-3xl font-bold text-primary mb-2">₭10,00,000</div>
+                <p className="text-sm text-muted-foreground">Starting Kuberon</p>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-profit mb-2">{userStats.activeTraders > 0 ? `${userStats.activeTraders}+` : '0'}</div>
@@ -134,7 +136,7 @@ const Home = () => {
               {trendingStocks?.map((stock) => (
                 <div key={stock.symbol} className="flex items-center gap-2 whitespace-nowrap">
                   <span className="font-bold">{stock.symbol}</span>
-                  <span className="font-medium">₹{stock.price.toFixed(2)}</span>
+                  <span className="font-medium">₭{stock.price.toFixed(2)}</span>
                   <span className={`text-sm font-medium ${
                     stock.change >= 0 ? 'text-profit' : 'text-loss'
                   }`}>
@@ -182,7 +184,7 @@ const Home = () => {
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <Medal className="w-4 h-4 text-gold" />
-                    <span>₹50,000 prize pool</span>
+                    <span>₭50,000 prize pool</span>
                   </div>
                 </div>
               </CardContent>
@@ -263,14 +265,14 @@ const Home = () => {
                 <DollarSign className="w-6 h-6 text-gold" />
                 <span className="font-bold text-gold text-lg">Starting Bonus</span>
               </div>
-              <p className="text-3xl font-bold text-gold mb-2">₹10,00,000</p>
+              <p className="text-3xl font-bold text-gold mb-2">₭10,00,000</p>
               <p className="text-sm text-muted-foreground">Virtual cash to start trading immediately</p>
             </div>
 
             <Button variant="hero" size="xl" className="gap-2" asChild>
               <Link to="/auth">
                 <Trophy className="w-5 h-5" />
-                Claim Your ₹10L & Start Trading
+                Claim Your ₭10L & Start Trading
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Button>

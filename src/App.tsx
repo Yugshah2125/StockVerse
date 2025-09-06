@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { ThemeProvider } from "@/components/theme-provider";
 import "@/services/firebase"; // Force Firebase initialization
 import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
@@ -14,6 +15,8 @@ import FantasyLeague from "./pages/FantasyLeague";
 import TradingChallenge from "./pages/TradingChallenge";
 import MiniGames from "./pages/MiniGames";
 import Leaderboard from "./pages/Leaderboard";
+import TransactionsReports from "./pages/TransactionsReports";
+import FinancialEducation from "./pages/FinancialEducation";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
@@ -40,11 +43,12 @@ const App = () => {
     console.log('Initializing providers...');
     return (
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <TooltipProvider>
+        <ThemeProvider defaultTheme="dark" storageKey="stockverse-ui-theme">
+          <AuthProvider>
+            <TooltipProvider>
             <Toaster />
             <Sonner />
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Home />} />
@@ -111,6 +115,26 @@ const App = () => {
                     </div>
                   </ProtectedRoute>
                 } />
+                <Route path="/transactions" element={
+                  <ProtectedRoute>
+                    <div className="min-h-screen bg-background">
+                      <Navigation />
+                      <div className="lg:ml-72">
+                        <TransactionsReports />
+                      </div>
+                    </div>
+                  </ProtectedRoute>
+                } />
+                <Route path="/education" element={
+                  <ProtectedRoute>
+                    <div className="min-h-screen bg-background">
+                      <Navigation />
+                      <div className="lg:ml-72">
+                        <FinancialEducation />
+                      </div>
+                    </div>
+                  </ProtectedRoute>
+                } />
                 <Route path="/profile" element={
                   <ProtectedRoute>
                     <div className="min-h-screen bg-background">
@@ -124,8 +148,9 @@ const App = () => {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
-          </TooltipProvider>
-        </AuthProvider>
+            </TooltipProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     );
   } catch (error) {

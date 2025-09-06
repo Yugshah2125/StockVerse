@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "question": "What does P/E ratio stand for?",
+    "options": ["Price to Earnings", "Profit to Equity", "Price to Equity", "Profit to Earnings"],
+    "correct": 0,
+    "explanation": "P/E ratio stands for Price-to-Earnings ratio, a key valuation metric."
+  },
+  {
+    "id": 2,
+    "question": "Which market is known as the 'Bear Market'?",
+    "options": ["Rising market", "Falling market", "Stable market", "Volatile market"],
+    "correct": 1,
+    "explanation": "A bear market is characterized by falling stock prices and pessimistic sentiment."
+  },
+  {
+    "id": 3,
+    "question": "What is a dividend?",
+    "options": ["Stock price increase", "Company debt", "Profit distribution to shareholders", "Trading fee"],
+    "correct": 2,
+    "explanation": "Dividends are payments made by companies to their shareholders from profits."
+  },
+  {
+    "id": 4,
+    "question": "What does IPO stand for?",
+    "options": ["Initial Public Offering", "International Price Order", "Investment Portfolio Option", "Internal Profit Operation"],
+    "correct": 0,
+    "explanation": "IPO is when a company first offers its shares to the public."
+  },
+  {
+    "id": 5,
+    "question": "What is market capitalization?",
+    "options": ["Company's debt", "Total value of company's shares", "Annual revenue", "Profit margin"],
+    "correct": 1,
+    "explanation": "Market cap is calculated by multiplying share price by total number of shares."
+  },
+  {
+    "id": 6,
+    "question": "What is a bull market?",
+    "options": ["Falling prices", "Rising prices", "Stable prices", "High volatility"],
+    "correct": 1,
+    "explanation": "A bull market is characterized by rising stock prices and optimistic sentiment."
+  },
+  {
+    "id": 7,
+    "question": "What does ROI stand for?",
+    "options": ["Rate of Interest", "Return on Investment", "Risk of Investment", "Revenue of Income"],
+    "correct": 1,
+    "explanation": "ROI measures the efficiency of an investment by comparing gain to cost."
+  },
+  {
+    "id": 8,
+    "question": "What is a stock split?",
+    "options": ["Selling half shares", "Dividing shares into more shares", "Merging companies", "Reducing share price"],
+    "correct": 1,
+    "explanation": "A stock split increases the number of shares while proportionally reducing the price."
+  },
+  {
+    "id": 9,
+    "question": "What is volatility in stocks?",
+    "options": ["Price stability", "Price fluctuation", "Trading volume", "Market timing"],
+    "correct": 1,
+    "explanation": "Volatility measures how much a stock's price fluctuates over time."
+  },
+  {
+    "id": 10,
+    "question": "What is a portfolio?",
+    "options": ["Single stock", "Collection of investments", "Trading strategy", "Market analysis"],
+    "correct": 1,
+    "explanation": "A portfolio is a collection of financial investments like stocks, bonds, and cash."
+  },
+  {
+    "id": 11,
+    "question": "What does EPS stand for?",
+    "options": ["Earnings Per Share", "Equity Per Stock", "Expected Price Share", "Economic Profit Share"],
+    "correct": 0,
+    "explanation": "EPS shows how much profit a company makes for each share of stock."
+  },
+  {
+    "id": 12,
+    "question": "What is a mutual fund?",
+    "options": ["Individual stock", "Pooled investment vehicle", "Bank account", "Insurance policy"],
+    "correct": 1,
+    "explanation": "Mutual funds pool money from many investors to buy a diversified portfolio."
+  },
+  {
+    "id": 13,
+    "question": "What is day trading?",
+    "options": ["Long-term investing", "Buying and selling within same day", "Weekend trading", "Monthly trading"],
+    "correct": 1,
+    "explanation": "Day trading involves buying and selling securities within the same trading day."
+  },
+  {
+    "id": 14,
+    "question": "What is a stop-loss order?",
+    "options": ["Buy order", "Automatic sell order at set price", "Profit booking", "Market analysis"],
+    "correct": 1,
+    "explanation": "A stop-loss order automatically sells a stock when it reaches a predetermined price."
+  },
+  {
+    "id": 15,
+    "question": "What is diversification?",
+    "options": ["Buying one stock", "Spreading investments across assets", "Selling all stocks", "Market timing"],
+    "correct": 1,
+    "explanation": "Diversification reduces risk by spreading investments across different assets."
+  },
+  {
+    "id": 16,
+    "question": "What is a blue-chip stock?",
+    "options": ["New company stock", "Large, established company stock", "Penny stock", "Foreign stock"],
+    "correct": 1,
+    "explanation": "Blue-chip stocks are shares of large, well-established, financially stable companies."
+  },
+  {
+    "id": 17,
+    "question": "What is compound interest?",
+    "options": ["Simple interest", "Interest on interest", "Bank fee", "Trading cost"],
+    "correct": 1,
+    "explanation": "Compound interest is earned on both the principal and previously earned interest."
+  },
+  {
+    "id": 18,
+    "question": "What is a recession?",
+    "options": ["Economic growth", "Economic decline", "Market boom", "High inflation"],
+    "correct": 1,
+    "explanation": "A recession is a period of economic decline with reduced business activity."
+  },
+  {
+    "id": 19,
+    "question": "What is inflation?",
+    "options": ["Falling prices", "Rising prices", "Stable prices", "Market crash"],
+    "correct": 1,
+    "explanation": "Inflation is the general increase in prices and fall in purchasing power of money."
+  },
+  {
+    "id": 20,
+    "question": "What is a bond?",
+    "options": ["Stock ownership", "Debt security", "Bank deposit", "Insurance policy"],
+    "correct": 1,
+    "explanation": "A bond is a debt security where investors loan money to entities for interest payments."
+  }
+]

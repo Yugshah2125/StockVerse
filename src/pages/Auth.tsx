@@ -128,13 +128,13 @@ const Auth = () => {
             <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
               Start with{" "}
               <span className="bg-gradient-to-r from-gold via-yellow-400 to-gold bg-clip-text text-transparent animate-gold-shimmer bg-[length:200%_auto]">
-                ₹10L Virtual Cash
+                ₭10L Virtual Cash
               </span>
             </h2>
 
             <p className="text-xl text-muted-foreground leading-relaxed">
               Trade Indian stocks (NSE/BSE), compete in fantasy leagues, and climb the leaderboards. 
-              No real money at risk - just pure gaming excitement meets Indian stock markets.
+              No real Kuberon at risk - just pure gaming excitement meets Indian stock markets.
             </p>
 
             <div className="grid grid-cols-3 gap-4 py-6">
@@ -273,7 +273,7 @@ const Auth = () => {
                         <span className="font-semibold text-gold">Starting Bonus</span>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        Get ₹10,00,000 virtual cash to start your Indian stock trading journey
+                        Get ₭10,00,000 virtual Kuberon to start your Indian stock trading journey
                       </p>
                     </div>
                     
@@ -284,7 +284,7 @@ const Auth = () => {
                       className="w-full"
                       disabled={isLoading}
                     >
-                      {isLoading ? "Creating Account..." : "Claim ₹10L & Start"}
+                      {isLoading ? "Creating Account..." : "Claim ₭10L & Start"}
                     </Button>
                   </form>
                   

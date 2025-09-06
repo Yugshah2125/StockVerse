@@ -7,7 +7,7 @@ export const useStockQuote = (symbol: string) => {
     queryKey: ['stock', symbol],
     queryFn: () => stockApi.getQuote(symbol),
     staleTime: 0, // Always fresh
-    refetchInterval: 5 * 1000, // Refetch every 5 seconds
+    refetchInterval: 2000, // Refetch every 2 seconds
     enabled: !!symbol,
   });
 };
@@ -17,8 +17,7 @@ export const useMultipleStocks = (symbols: string[]) => {
   return useQuery<StockData[]>({
     queryKey: ['stocks', symbols],
     queryFn: () => stockApi.getMultipleQuotes(symbols),
-    staleTime: 0,
-    refetchInterval: 5 * 1000, // Refetch every 5 seconds
+    staleTime: Infinity, // Never refetch
     enabled: symbols.length > 0,
   });
 };
@@ -39,6 +38,6 @@ export const useTrendingStocks = () => {
     queryKey: ['trending-stocks'],
     queryFn: stockApi.getTrendingStocks,
     staleTime: 0, // Always fresh
-    refetchInterval: 5 * 1000, // Refetch every 5 seconds
+    refetchInterval: 5000, // Refetch every 5 seconds
   });
 };

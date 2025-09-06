@@ -39,6 +39,18 @@ let fallbackPortfolio: Portfolio = {
   trades: []
 };
 
+export interface Trade {
+  id: string;
+  userId: string;
+  symbol: string;
+  type: 'buy' | 'sell';
+  shares: number;
+  price: number;
+  total: number;
+  timestamp: Date;
+  pnl?: number;
+}
+
 export const tradingApi = {
   // Get current portfolio
   async getPortfolio(): Promise<Portfolio> {
@@ -94,6 +106,14 @@ export const tradingApi = {
 
   // Get trade history
   async getTradeHistory(): Promise<Trade[]> {
-    return [];
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.id) return [];
+      
+      const { firebaseApi } = await import('@/services/firebaseApi');
+      return await firebaseApi.getTradeHistory(user.id);
+    } catch (error) {
+      return [];
+    }
   }
 };

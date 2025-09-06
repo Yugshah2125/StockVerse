@@ -34,7 +34,7 @@ const StockSearch = ({ onSelectStock }: StockSearchProps) => {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
         <Input
-          placeholder="Search stocks (e.g., AAPL, Microsoft)..."
+          placeholder="Search Indian stocks (e.g., RELIANCE, TCS, HDFC)..."
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           className="pl-10"
@@ -75,7 +75,7 @@ const StockSearch = ({ onSelectStock }: StockSearchProps) => {
                 <p className="text-sm text-muted-foreground">{stockData.name}</p>
               </div>
               <div className="text-right">
-                <p className="text-2xl font-bold">${stockData.price.toFixed(2)}</p>
+                <p className="text-2xl font-bold">₭{stockData.price.toFixed(2)}</p>
                 <div className={`flex items-center gap-1 text-sm font-medium ${
                   stockData.change >= 0 ? 'text-profit' : 'text-loss'
                 }`}>
@@ -85,7 +85,7 @@ const StockSearch = ({ onSelectStock }: StockSearchProps) => {
                     <TrendingDown className="w-4 h-4" />
                   )}
                   <span>
-                    {stockData.change >= 0 ? '+' : ''}{stockData.change.toFixed(2)} 
+                    {stockData.change >= 0 ? '+' : ''}₭{stockData.change.toFixed(2)} 
                     ({stockData.change >= 0 ? '+' : ''}{stockData.changePercent.toFixed(2)}%)
                   </span>
                 </div>
@@ -95,7 +95,7 @@ const StockSearch = ({ onSelectStock }: StockSearchProps) => {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-muted-foreground">Open</p>
-                <p className="font-medium">${stockData.open.toFixed(2)}</p>
+                <p className="font-medium">₭{stockData.open.toFixed(2)}</p>
               </div>
               <div>
                 <p className="text-muted-foreground">Volume</p>
@@ -103,11 +103,11 @@ const StockSearch = ({ onSelectStock }: StockSearchProps) => {
               </div>
               <div>
                 <p className="text-muted-foreground">High</p>
-                <p className="font-medium">${stockData.high.toFixed(2)}</p>
+                <p className="font-medium">₭{stockData.high.toFixed(2)}</p>
               </div>
               <div>
                 <p className="text-muted-foreground">Low</p>
-                <p className="font-medium">${stockData.low.toFixed(2)}</p>
+                <p className="font-medium">₭{stockData.low.toFixed(2)}</p>
               </div>
             </div>
           </CardContent>

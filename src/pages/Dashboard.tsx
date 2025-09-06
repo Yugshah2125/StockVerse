@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { usePortfolio } from "@/hooks/useTrading";
 import StockSearch from "@/components/StockSearch";
 import TradingModal from "@/components/TradingModal";
-import TradingTest from "@/components/TradingTest";
+
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -22,15 +22,18 @@ import {
   ChartBar,
   Flame,
   Search,
-  ShoppingCart
+  ShoppingCart,
+  PieChart
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { alphaVantageApi } from '@/services/alphaVantageApi';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const { data: trendingStocks, isLoading: isLoadingStocks } = useTrendingStocks();
   const { data: portfolio } = usePortfolio();
   const [tradingSymbol, setTradingSymbol] = useState<string | null>(null);
+  const [tradingAction, setTradingAction] = useState<'buy' | 'sell'>('buy');
   
   // Use real portfolio data or defaults
   const virtualCash = portfolio?.cash || 0;
@@ -73,11 +76,11 @@ const Dashboard = () => {
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                 <DollarSign className="w-4 h-4 text-gold" />
-                Virtual Cash
+                Kuberon
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-gold">₹{virtualCash.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-gold">₭{virtualCash.toLocaleString()}</p>
               <p className="text-xs text-muted-foreground mt-1">Available to trade</p>
             </CardContent>
           </Card>
@@ -91,10 +94,10 @@ const Dashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">₹{portfolioValue.toLocaleString()}</p>
+              <p className="text-2xl font-bold">₭{portfolioValue.toLocaleString()}</p>
               <div className="flex items-center gap-1 mt-1">
                 <TrendingUp className="w-3 h-3 text-profit" />
-                <p className="text-xs text-profit font-medium">+₹{totalReturn.toLocaleString()} ({totalReturnPercent}%)</p>
+                <p className="text-xs text-profit font-medium">+₭{totalReturn.toLocaleString()} ({totalReturnPercent}%)</p>
               </div>
             </CardContent>
           </Card>
@@ -107,7 +110,7 @@ const Dashboard = () => {
             <CardContent>
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-profit" />
-                <p className="text-2xl font-bold text-profit">+₹{dailyChange.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-profit">+₭{dailyChange.toLocaleString()}</p>
               </div>
               <p className="text-xs text-profit font-medium mt-1">+{dailyChangePercent}% today</p>
             </CardContent>
@@ -283,56 +286,66 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        {/* Live Market Data */}
+        {/* Top Index Funds */}
         <Card className="animate-slide-up">
           <CardHeader>
             <CardTitle className="text-xl flex items-center gap-2">
-              <TrendingUp className="w-6 h-6 text-primary" />
-              Live Market Data
+              <PieChart className="w-6 h-6 text-primary" />
+              Top Index Funds
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {isLoadingStocks ? (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                <p className="text-muted-foreground">Loading market data...</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {trendingStocks?.map((stock) => (
-                  <div key={stock.symbol} className="p-4 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Live Index Fund Data */}
+              {[
+                { symbol: 'NIFTY50', name: 'Top 50 Large Cap Stocks', displayName: 'NIFTY 50' },
+                { symbol: 'NIFTYBANK', name: 'Banking Sector Index', displayName: 'NIFTY BANK' },
+                { symbol: 'NIFTYIT', name: 'Information Technology', displayName: 'NIFTY IT' },
+                { symbol: 'SENSEX', name: 'BSE 30 Benchmark Index', displayName: 'SENSEX' }
+              ].map((index) => {
+                // Use Alpha Vantage daily baseline + mock system
+                const currentPrice = alphaVantageApi.getSimulatedPrice(index.symbol);
+                const basePrice = alphaVantageApi.getBaselinePrice(index.symbol);
+                const priceChange = currentPrice - basePrice;
+                const changePercent = basePrice > 0 ? (priceChange / basePrice) * 100 : 0;
+                
+                return (
+                  <div key={index.symbol} className="p-4 rounded-lg border border-border hover:border-primary/30 transition-colors">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-bold text-lg">{stock.symbol}</span>
-                      <Badge variant={stock.change >= 0 ? "default" : "destructive"} className="text-xs">
-                        {stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                      <span className="font-bold text-lg">{index.displayName}</span>
+                      <Badge variant={changePercent >= 0 ? "default" : "destructive"} className="text-xs">
+                        {changePercent >= 0 ? '+' : ''}{changePercent.toFixed(2)}%
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-2">{stock.name}</p>
+                    <p className="text-sm text-muted-foreground mb-2">{index.name}</p>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xl font-bold">₹{stock.price.toFixed(2)}</span>
+                      <span className="text-xl font-bold">₭{currentPrice.toLocaleString()}</span>
                       <div className={`flex items-center gap-1 text-sm ${
-                        stock.change >= 0 ? 'text-profit' : 'text-loss'
+                        changePercent >= 0 ? 'text-profit' : 'text-loss'
                       }`}>
-                        {stock.change >= 0 ? (
+                        {changePercent >= 0 ? (
                           <TrendingUp className="w-3 h-3" />
                         ) : (
                           <TrendingDown className="w-3 h-3" />
                         )}
-                        <span>{stock.change >= 0 ? '+' : ''}₹{stock.change.toFixed(2)}</span>
+                        <span>{changePercent >= 0 ? '+' : ''}₭{priceChange.toFixed(2)}</span>
                       </div>
                     </div>
                     <Button 
                       size="sm" 
                       className="w-full"
-                      onClick={() => setTradingSymbol(stock.symbol)}
+                      onClick={() => {
+                        setTradingSymbol(index.symbol);
+                        setTradingAction('buy');
+                      }}
                     >
                       <ShoppingCart className="w-3 h-3 mr-1" />
-                      Trade
+                      Invest
                     </Button>
                   </div>
-                ))}
-              </div>
-            )}
+                );
+              })}
+            </div>
           </CardContent>
         </Card>
 
@@ -349,10 +362,141 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Trading Test */}
-        <div className="animate-slide-up">
-          <TradingTest />
-        </div>
+        {/* All Stocks List */}
+        <Card className="animate-slide-up">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <ChartBar className="w-6 h-6 text-primary" />
+              All Available Stocks
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {[
+                { symbol: 'RELIANCE', name: 'Reliance Industries Ltd.' },
+                { symbol: 'TCS', name: 'Tata Consultancy Services Ltd.' },
+                { symbol: 'HDFCBANK', name: 'HDFC Bank Ltd.' },
+                { symbol: 'INFY', name: 'Infosys Ltd.' },
+                { symbol: 'ICICIBANK', name: 'ICICI Bank Ltd.' },
+                { symbol: 'HINDUNILVR', name: 'Hindustan Unilever Ltd.' },
+                { symbol: 'ITC', name: 'ITC Ltd.' },
+                { symbol: 'SBIN', name: 'State Bank of India' },
+                { symbol: 'BHARTIARTL', name: 'Bharti Airtel Ltd.' },
+                { symbol: 'KOTAKBANK', name: 'Kotak Mahindra Bank Ltd.' },
+                { symbol: 'LT', name: 'Larsen & Toubro Ltd.' },
+                { symbol: 'ASIANPAINT', name: 'Asian Paints Ltd.' },
+                { symbol: 'MARUTI', name: 'Maruti Suzuki India Ltd.' },
+                { symbol: 'BAJFINANCE', name: 'Bajaj Finance Ltd.' },
+                { symbol: 'HCLTECH', name: 'HCL Technologies Ltd.' },
+                { symbol: 'AXISBANK', name: 'Axis Bank Ltd.' },
+                { symbol: 'WIPRO', name: 'Wipro Ltd.' },
+                { symbol: 'ULTRACEMCO', name: 'UltraTech Cement Ltd.' },
+                { symbol: 'NESTLEIND', name: 'Nestle India Ltd.' },
+                { symbol: 'TITAN', name: 'Titan Company Ltd.' },
+                { symbol: 'BANKBARODA', name: 'Bank of Baroda' },
+                { symbol: 'PNB', name: 'Punjab National Bank' },
+                { symbol: 'CANBK', name: 'Canara Bank' },
+                { symbol: 'UNIONBANK', name: 'Union Bank of India' },
+                { symbol: 'IDFCFIRSTB', name: 'IDFC First Bank Ltd.' },
+                { symbol: 'TECHM', name: 'Tech Mahindra Ltd.' },
+                { symbol: 'LTIM', name: 'LTIMindtree Ltd.' },
+                { symbol: 'MPHASIS', name: 'Mphasis Ltd.' },
+                { symbol: 'COFORGE', name: 'Coforge Ltd.' },
+                { symbol: 'TATAMOTORS', name: 'Tata Motors Ltd.' },
+                { symbol: 'M&M', name: 'Mahindra & Mahindra Ltd.' },
+                { symbol: 'BAJAJ-AUTO', name: 'Bajaj Auto Ltd.' },
+                { symbol: 'HEROMOTOCO', name: 'Hero MotoCorp Ltd.' },
+                { symbol: 'EICHERMOT', name: 'Eicher Motors Ltd.' },
+                { symbol: 'SUNPHARMA', name: 'Sun Pharmaceutical Industries Ltd.' },
+                { symbol: 'DRREDDY', name: 'Dr. Reddys Laboratories Ltd.' },
+                { symbol: 'CIPLA', name: 'Cipla Ltd.' },
+                { symbol: 'BIOCON', name: 'Biocon Ltd.' },
+                { symbol: 'LUPIN', name: 'Lupin Ltd.' },
+                { symbol: 'TATASTEEL', name: 'Tata Steel Ltd.' },
+                { symbol: 'JSWSTEEL', name: 'JSW Steel Ltd.' },
+                { symbol: 'HINDALCO', name: 'Hindalco Industries Ltd.' },
+                { symbol: 'VEDL', name: 'Vedanta Ltd.' },
+                { symbol: 'COALINDIA', name: 'Coal India Ltd.' },
+                { symbol: 'ONGC', name: 'Oil & Natural Gas Corporation Ltd.' },
+                { symbol: 'IOC', name: 'Indian Oil Corporation Ltd.' },
+                { symbol: 'BPCL', name: 'Bharat Petroleum Corporation Ltd.' },
+                { symbol: 'HPCL', name: 'Hindustan Petroleum Corporation Ltd.' },
+                { symbol: 'GAIL', name: 'GAIL (India) Ltd.' },
+                { symbol: 'BRITANNIA', name: 'Britannia Industries Ltd.' },
+                { symbol: 'DABUR', name: 'Dabur India Ltd.' },
+                { symbol: 'MARICO', name: 'Marico Ltd.' },
+                { symbol: 'GODREJCP', name: 'Godrej Consumer Products Ltd.' },
+                { symbol: 'COLPAL', name: 'Colgate Palmolive (India) Ltd.' },
+                { symbol: 'JIO', name: 'Reliance Jio Infocomm Ltd.' },
+                { symbol: 'IDEA', name: 'Vodafone Idea Ltd.' },
+                { symbol: 'SHREECEM', name: 'Shree Cement Ltd.' },
+                { symbol: 'AMBUJACEM', name: 'Ambuja Cements Ltd.' },
+                { symbol: 'ACC', name: 'ACC Ltd.' },
+                { symbol: 'DLF', name: 'DLF Ltd.' },
+                { symbol: 'GODREJPROP', name: 'Godrej Properties Ltd.' },
+                { symbol: 'OBEROIRLTY', name: 'Oberoi Realty Ltd.' },
+                { symbol: 'NTPC', name: 'NTPC Ltd.' },
+                { symbol: 'POWERGRID', name: 'Power Grid Corporation of India Ltd.' },
+                { symbol: 'TATAPOWER', name: 'Tata Power Company Ltd.' },
+                { symbol: 'INDIGO', name: 'InterGlobe Aviation Ltd.' },
+                { symbol: 'SPICEJET', name: 'SpiceJet Ltd.' },
+                { symbol: 'DMART', name: 'Avenue Supermarts Ltd.' },
+                { symbol: 'TRENT', name: 'Trent Ltd.' },
+                { symbol: 'SBILIFE', name: 'SBI Life Insurance Company Ltd.' },
+                { symbol: 'HDFCLIFE', name: 'HDFC Life Insurance Company Ltd.' },
+                { symbol: 'ICICIPRULI', name: 'ICICI Prudential Life Insurance Company Ltd.' },
+                { symbol: 'ZOMATO', name: 'Zomato Ltd.' },
+                { symbol: 'PAYTM', name: 'One 97 Communications Ltd.' },
+                { symbol: 'NYKAA', name: 'FSN E-Commerce Ventures Ltd.' },
+                { symbol: 'POLICYBZR', name: 'PB Fintech Ltd.' },
+                { symbol: 'CARTRADE', name: 'CarTrade Tech Ltd.' }
+              ].map((stock) => {
+                const currentPrice = alphaVantageApi.getSimulatedPrice(stock.symbol);
+                const basePrice = alphaVantageApi.getBaselinePrice(stock.symbol);
+                const priceChange = currentPrice - basePrice;
+                const changePercent = basePrice > 0 ? (priceChange / basePrice) * 100 : 0;
+                
+                return (
+                  <div key={stock.symbol} className="p-3 rounded-lg border border-border hover:border-primary/30 transition-colors">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-sm">{stock.symbol}</span>
+                      <Badge variant={changePercent >= 0 ? "default" : "destructive"} className="text-xs">
+                        {changePercent >= 0 ? '+' : ''}{changePercent.toFixed(2)}%
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{stock.name}</p>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-bold">₭{currentPrice.toLocaleString()}</span>
+                      <div className={`flex items-center gap-1 text-xs ${
+                        changePercent >= 0 ? 'text-profit' : 'text-loss'
+                      }`}>
+                        {changePercent >= 0 ? (
+                          <TrendingUp className="w-3 h-3" />
+                        ) : (
+                          <TrendingDown className="w-3 h-3" />
+                        )}
+                        <span>{changePercent >= 0 ? '+' : ''}₭{priceChange.toFixed(2)}</span>
+                      </div>
+                    </div>
+                    <Button 
+                      size="sm" 
+                      className="w-full text-xs"
+                      onClick={() => {
+                        setTradingSymbol(stock.symbol);
+                        setTradingAction('buy');
+                      }}
+                    >
+                      <ShoppingCart className="w-3 h-3 mr-1" />
+                      Trade
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+
         
         {/* Trading Modal */}
         {tradingSymbol && (
@@ -360,6 +504,7 @@ const Dashboard = () => {
             symbol={tradingSymbol}
             isOpen={!!tradingSymbol}
             onClose={() => setTradingSymbol(null)}
+            defaultTab={tradingAction}
           />
         )}
       </div>

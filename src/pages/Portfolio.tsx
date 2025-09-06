@@ -19,6 +19,7 @@ import {
 
 const Portfolio = () => {
   const [tradingSymbol, setTradingSymbol] = useState<string | null>(null);
+  const [tradingAction, setTradingAction] = useState<'buy' | 'sell'>('buy');
   const { data: portfolio, isLoading } = usePortfolio();
 
   if (isLoading) {
@@ -62,7 +63,7 @@ const Portfolio = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p className="text-3xl font-bold">₹{totalValue.toLocaleString()}</p>
+                <p className="text-3xl font-bold">₭{totalValue.toLocaleString()}</p>
                 <div className={`flex items-center gap-1 text-sm font-medium ${
                   totalReturn >= 0 ? 'text-profit' : 'text-loss'
                 }`}>
@@ -72,7 +73,7 @@ const Portfolio = () => {
                     <TrendingDown className="w-4 h-4" />
                   )}
                   <span>
-                    {totalReturn >= 0 ? '+' : ''}₹{totalReturn.toFixed(2)} ({totalReturn >= 0 ? '+' : ''}{returnPercent.toFixed(2)}%)
+                    {totalReturn >= 0 ? '+' : ''}₭{totalReturn.toFixed(2)} ({totalReturn >= 0 ? '+' : ''}{returnPercent.toFixed(2)}%)
                   </span>
                 </div>
               </div>
@@ -98,12 +99,12 @@ const Portfolio = () => {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Activity className="w-5 h-5 text-gold" />
-                Available Cash
+                Available Kuberon
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p className="text-3xl font-bold text-gold">₹{cash.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-gold">₭{cash.toLocaleString()}</p>
                 <p className="text-sm text-muted-foreground">Ready to invest</p>
               </div>
             </CardContent>
@@ -140,12 +141,12 @@ const Portfolio = () => {
                           </div>
                           <div>
                             <h3 className="font-semibold text-lg">{holding.symbol}</h3>
-                            <p className="text-sm text-muted-foreground">{holding.shares || 0} shares @ ₹{(holding.avgPrice || 0).toFixed(2)}</p>
+                            <p className="text-sm text-muted-foreground">{holding.shares || 0} shares @ ₭{(holding.avgPrice || 0).toFixed(2)}</p>
                           </div>
                         </div>
                         
                         <div className="text-right">
-                          <p className="font-bold text-lg">₹{(holding.totalValue || 0).toLocaleString()}</p>
+                          <p className="font-bold text-lg">₭{(holding.totalValue || 0).toLocaleString()}</p>
                           <div className={`flex items-center gap-1 text-sm font-medium ${
                             isPositive ? 'text-profit' : 'text-loss'
                           }`}>
@@ -155,7 +156,7 @@ const Portfolio = () => {
                               <TrendingDown className="w-3 h-3" />
                             )}
                             <span>
-                              {isPositive ? '+' : ''}₹{(holding.totalReturn || 0).toFixed(2)} ({isPositive ? '+' : ''}{(holding.returnPercent || 0).toFixed(2)}%)
+                              {isPositive ? '+' : ''}₭{(holding.totalReturn || 0).toFixed(2)} ({isPositive ? '+' : ''}{(holding.returnPercent || 0).toFixed(2)}%)
                             </span>
                           </div>
                         </div>
@@ -164,11 +165,11 @@ const Portfolio = () => {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
                           <p className="text-muted-foreground">Avg Price</p>
-                          <p className="font-medium">₹{(holding.avgPrice || 0).toFixed(2)}</p>
+                          <p className="font-medium">₭{(holding.avgPrice || 0).toFixed(2)}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Current Price</p>
-                          <p className="font-medium">₹{(holding.currentPrice || 0).toFixed(2)}</p>
+                          <p className="font-medium">₭{(holding.currentPrice || 0).toFixed(2)}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Allocation</p>
@@ -176,17 +177,23 @@ const Portfolio = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Button 
-                            variant="outline" 
+                            variant="destructive" 
                             size="sm"
-                            onClick={() => setTradingSymbol(holding.symbol)}
+                            onClick={() => {
+                              setTradingSymbol(holding.symbol);
+                              setTradingAction('sell');
+                            }}
                           >
                             <Minus className="w-3 h-3 mr-1" />
                             Sell
                           </Button>
                           <Button 
-                            variant="secondary" 
+                            variant="profit" 
                             size="sm"
-                            onClick={() => setTradingSymbol(holding.symbol)}
+                            onClick={() => {
+                              setTradingSymbol(holding.symbol);
+                              setTradingAction('buy');
+                            }}
                           >
                             <Plus className="w-3 h-3 mr-1" />
                             Buy
@@ -211,6 +218,7 @@ const Portfolio = () => {
             symbol={tradingSymbol}
             isOpen={!!tradingSymbol}
             onClose={() => setTradingSymbol(null)}
+            defaultTab={tradingAction}
           />
         )}
       </div>

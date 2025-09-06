@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "question": "What does P/E ratio stand for?",
+    "options": ["Price to Earnings", "Profit to Equity", "Price to Equity", "Profit to Earnings"],
+    "correct": 0,
+    "explanation": "P/E ratio stands for Price-to-Earnings ratio, which compares a company's share price to its earnings per share."
+  },
+  {
+    "id": 2,
+    "question": "What is a bull market?",
+    "options": ["Market going down", "Market going up", "Stable market", "Volatile market"],
+    "correct": 1,
+    "explanation": "A bull market refers to a period when stock prices are rising and investor confidence is high."
+  },
+  {
+    "id": 3,
+    "question": "What does IPO stand for?",
+    "options": ["Initial Public Offering", "International Price Order", "Internal Profit Operation", "Investment Portfolio Option"],
+    "correct": 0,
+    "explanation": "IPO stands for Initial Public Offering, when a company first sells shares to the public."
+  },
+  {
+    "id": 4,
+    "question": "What is diversification in investing?",
+    "options": ["Buying only one stock", "Spreading investments across different assets", "Selling all stocks", "Day trading"],
+    "correct": 1,
+    "explanation": "Diversification means spreading investments across different assets to reduce risk."
+  },
+  {
+    "id": 5,
+    "question": "What is a dividend?",
+    "options": ["Stock price increase", "Company debt", "Payment to shareholders", "Trading fee"],
+    "correct": 2,
+    "explanation": "A dividend is a payment made by companies to their shareholders from profits."
+  },
+  {
+    "id": 6,
+    "question": "What does ROI stand for?",
+    "options": ["Return on Investment", "Rate of Interest", "Risk of Investment", "Revenue of Income"],
+    "correct": 0,
+    "explanation": "ROI stands for Return on Investment, measuring the efficiency of an investment."
+  },
+  {
+    "id": 7,
+    "question": "What is market capitalization?",
+    "options": ["Company's debt", "Total value of company's shares", "Annual revenue", "Number of employees"],
+    "correct": 1,
+    "explanation": "Market capitalization is the total value of a company's shares in the stock market."
+  },
+  {
+    "id": 8,
+    "question": "What is a bear market?",
+    "options": ["Rising market", "Falling market", "Stable market", "New market"],
+    "correct": 1,
+    "explanation": "A bear market is a period when stock prices are falling and pessimism prevails."
+  },
+  {
+    "id": 9,
+    "question": "What is compound interest?",
+    "options": ["Simple interest", "Interest on interest", "Bank fees", "Stock dividends"],
+    "correct": 1,
+    "explanation": "Compound interest is interest calculated on both the initial principal and accumulated interest."
+  },
+  {
+    "id": 10,
+    "question": "What is volatility in stocks?",
+    "options": ["Stock volume", "Price stability", "Price fluctuation", "Company size"],
+    "correct": 2,
+    "explanation": "Volatility refers to how much a stock's price fluctuates over time."
+  },
+  {
+    "id": 11,
+    "question": "What is a mutual fund?",
+    "options": ["Individual stock", "Pooled investment vehicle", "Bank account", "Insurance policy"],
+    "correct": 1,
+    "explanation": "A mutual fund pools money from many investors to buy a diversified portfolio of securities."
+  },
+  {
+    "id": 12,
+    "question": "What does EPS stand for?",
+    "options": ["Earnings Per Share", "Equity Per Stock", "Expected Price Share", "Economic Profit System"],
+    "correct": 0,
+    "explanation": "EPS stands for Earnings Per Share, showing company's profit divided by outstanding shares."
+  },
+  {
+    "id": 13,
+    "question": "What is a stock split?",
+    "options": ["Selling half shares", "Dividing shares into more shares", "Merging companies", "Closing positions"],
+    "correct": 1,
+    "explanation": "A stock split divides existing shares into multiple shares, reducing the price per share proportionally."
+  },
+  {
+    "id": 14,
+    "question": "What is insider trading?",
+    "options": ["Legal trading", "Trading with non-public information", "Day trading", "Long-term investing"],
+    "correct": 1,
+    "explanation": "Insider trading involves trading securities based on material, non-public information, which is illegal."
+  },
+  {
+    "id": 15,
+    "question": "What is a portfolio?",
+    "options": ["Single investment", "Collection of investments", "Trading strategy", "Market analysis"],
+    "correct": 1,
+    "explanation": "A portfolio is a collection of financial investments like stocks, bonds, and other securities."
+  }
+]

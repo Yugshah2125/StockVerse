@@ -1,0 +1,242 @@
+[
+  {
+    "id": 1,
+    "scenario": "📧 Email from: noreply@paypal-security.com\n\n⚠️ URGENT: Account Suspended\n\nYour PayPal account has been temporarily suspended due to unusual activity. Click here to verify your identity within 24 hours or your account will be permanently closed.\n\n[Verify Account Now] → bit.ly/pp-verify-2024",
+    "isScam": true,
+    "explanation": "🚨 Red flags: Suspicious sender domain, urgent language, shortened URL, and requesting immediate action. PayPal uses official domains and never threatens permanent closure via email."
+  },
+  {
+    "id": 2,
+    "scenario": "💬 WhatsApp Message from +1-555-0123:\n\n\"Hey! I found this amazing crypto investment opportunity. My friend made $50K in just 2 weeks! 🚀💰 You just need to send 0.1 BTC to get started. Want the link?\"",
+    "isScam": true,
+    "explanation": "🚨 Classic crypto scam: Unsolicited investment advice, unrealistic returns, upfront payment required, and pressure from 'friends' who made money."
+  },
+  {
+    "id": 3,
+    "scenario": "🐦 Twitter/X Post from @ElonMusk_Official (Verified ✓):\n\n\"To celebrate Tesla's success, I'm giving away 10,000 BTC! Send 0.5-2 BTC to the address below and I'll send back 5-20 BTC immediately! Only first 1000 people! 🎉\n\nbc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh\"",
+    "isScam": true,
+    "explanation": "🚨 Fake giveaway scam: Even with a verified checkmark, this is fraudulent. Real celebrities never ask you to send crypto first. The account is impersonating Elon Musk."
+  },
+  {
+    "id": 4,
+    "scenario": "📱 SMS from Bank of America (555-0199):\n\n\"BOA ALERT: Suspicious $2,847 transaction detected on your account. If this wasn't you, reply STOP or call 1-800-432-1000 immediately to secure your account.\"",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Banks do send fraud alerts via SMS. The number matches BOA's official fraud line, and they're not asking for personal info - just to call their official number."
+  },
+  {
+    "id": 5,
+    "scenario": "💻 Pop-up on website:\n\n\"🎉 CONGRATULATIONS! 🎉\nYou're our 1,000,000th visitor today!\nYou've won a FREE iPhone 15 Pro!\nClaim your prize now - Limited time offer!\n\n[CLAIM NOW] [Close]\"",
+    "isScam": true,
+    "explanation": "🚨 Classic fake prize scam: No website tracks visitor numbers like this. These pop-ups lead to data harvesting or payment requests for 'shipping fees.'"
+  },
+  {
+    "id": 6,
+    "scenario": "📧 Email from: support@netflix.com\n\nSubject: Payment Failed - Update Required\n\nHi [Your Name],\n\nYour Netflix subscription payment couldn't be processed. Please update your payment method within 3 days to avoid service interruption.\n\n[Update Payment Method]\n\nThanks,\nThe Netflix Team",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Netflix domain, professional tone, reasonable timeframe, and directing to official account management. Netflix does send payment failure notifications."
+  },
+  {
+    "id": 7,
+    "scenario": "📱 Instagram DM from @crypto_millionaire_2024:\n\n\"I see you're interested in crypto! 👀 I made $100K last month with my exclusive trading signals. Join my VIP group for just $299 and I'll share my secret strategy! Limited spots available! 💎🚀\"",
+    "isScam": true,
+    "explanation": "🚨 Investment scam: Unsolicited DMs, unrealistic profit claims, 'secret strategies,' upfront fees, and artificial scarcity. Legitimate traders don't cold-message strangers."
+  },
+  {
+    "id": 8,
+    "scenario": "📧 Email from: security@apple.com\n\nSubject: Sign-in attempt from new device\n\nSomeone tried to sign in to your Apple ID from a Windows PC in California. If this was you, you can ignore this email.\n\nIf this wasn't you, secure your account:\n[Secure Account] → appleid.apple.com",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Apple domain, informative (not urgent) tone, links to official Apple ID website, and provides option to ignore if it was you."
+  },
+  {
+    "id": 9,
+    "scenario": "💬 WhatsApp from unknown number:\n\n\"Hi mom! 📱 My phone broke and I'm using a friend's phone. I need $500 urgently for car repairs. Can you send it to this account? I'll pay you back tomorrow! Love you ❤️\"\n\nAccount: Zelle - sarah.johnson.temp@gmail.com",
+    "isScam": true,
+    "explanation": "🚨 Family emergency scam: Impersonating family member, creating urgency, asking for money to unfamiliar account. Always verify through another communication method."
+  },
+  {
+    "id": 10,
+    "scenario": "📧 Email from: no-reply@amazon.com\n\nYour order #123-4567890-1234567 has shipped!\n\nEstimated delivery: Tomorrow by 8 PM\nTracking: [Track Package]\n\nOrder total: $89.99\nShipping address: [Your Address]\n\nQuestions? Visit Your Orders in Your Account.",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Amazon domain, specific order details, realistic delivery timeframe, and directs to official account page rather than external links."
+  },
+  {
+    "id": 11,
+    "scenario": "📱 Text from 555-0156:\n\n\"FINAL NOTICE: Your car warranty is about to expire! You could be stuck with thousands in repair costs. Press 1 to speak with a specialist about extending your warranty today!\"",
+    "isScam": true,
+    "explanation": "🚨 Extended warranty scam: Unsolicited contact, false urgency, fear tactics, and requesting immediate action. Legitimate warranty companies don't use these tactics."
+  },
+  {
+    "id": 12,
+    "scenario": "💻 Website: microsoft-support-center.net\n\n\"⚠️ CRITICAL SECURITY ALERT ⚠️\nYour Windows computer is infected with 5 viruses!\nCall Microsoft Support immediately: 1-800-VIRUS-FIX\nDo not shut down your computer!\"",
+    "isScam": true,
+    "explanation": "🚨 Tech support scam: Fake Microsoft domain, fear tactics, fake virus warnings, and requesting immediate phone contact. Microsoft doesn't provide support this way."
+  },
+  {
+    "id": 13,
+    "scenario": "📧 Email from: billing@spotify.com\n\nSubject: Spotify Premium - Payment Confirmation\n\nThank you for your Spotify Premium subscription!\n\nPlan: Spotify Premium Individual\nAmount: $10.99\nNext billing date: March 15, 2024\n\n[Manage Subscription] → spotify.com/account",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Spotify domain, standard pricing, reasonable billing cycle, and links to official Spotify account management page."
+  },
+  {
+    "id": 14,
+    "scenario": "🐦 Twitter/X DM from @support_twitter:\n\n\"Your account has been flagged for suspicious activity. To avoid suspension, please verify your identity by providing your username, password, and phone number within 2 hours.\"",
+    "isScam": true,
+    "explanation": "🚨 Account takeover scam: Fake support account, requesting login credentials, artificial urgency. Real Twitter support never asks for passwords via DM."
+  },
+  {
+    "id": 15,
+    "scenario": "📧 Email from: noreply@chase.com\n\nSubject: Monthly Statement Available\n\nYour Chase credit card statement for February 2024 is now available.\n\nStatement balance: $1,247.83\nMinimum payment due: $37.00\nDue date: March 22, 2024\n\n[View Statement] → chase.com/statements",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Chase domain, standard statement information, reasonable amounts, and links to official Chase website for statement viewing."
+  },
+  {
+    "id": 16,
+    "scenario": "💬 Facebook Messenger from 'Mark Zuckerberg':\n\n\"Congratulations! You've been selected for our Facebook Lottery Program! You've won $750,000! To claim your prize, please send $500 for processing fees to our agent via Western Union.\"",
+    "isScam": true,
+    "explanation": "🚨 Fake lottery scam: Impersonating CEO, unsolicited prize notification, requesting upfront fees. Facebook doesn't run lotteries, and prizes never require fees."
+  },
+  {
+    "id": 17,
+    "scenario": "📱 SMS from 555-0187:\n\n\"Your package delivery failed. Reschedule delivery and pay $3.95 shipping fee: usps-redelivery.com/track/AB123456789\"\n\nLink leads to: usps-redelivery.com",
+    "isScam": true,
+    "explanation": "🚨 Fake delivery scam: Suspicious domain (not usps.com), requesting payment for redelivery, and USPS doesn't charge redelivery fees via text links."
+  },
+  {
+    "id": 18,
+    "scenario": "📧 Email from: security@paypal.com\n\nSubject: New device signed in to your account\n\nA new device signed in to your PayPal account:\n\nDevice: iPhone 14\nLocation: New York, NY\nTime: Today at 2:47 PM\n\nIf this wasn't you: [Secure Account]\nIf this was you: No action needed",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official PayPal domain, informative notification, specific details, and provides option to ignore if it was you. PayPal sends these security notifications."
+  },
+  {
+    "id": 19,
+    "scenario": "💻 Pop-up while browsing:\n\n\"⚠️ YOUR COMPUTER IS INFECTED! ⚠️\nWindows Defender has detected 3 threats!\nCall Windows Support NOW: 1-888-HELP-WIN\nDo not close this window or your files will be deleted!\"",
+    "isScam": true,
+    "explanation": "🚨 Tech support scam: Fake virus warnings, fear tactics, impersonating Windows Defender, and requesting immediate phone contact. Real antivirus doesn't work this way."
+  },
+  {
+    "id": 20,
+    "scenario": "📧 Email from: orders@bestbuy.com\n\nSubject: Order Confirmation - Thank you for your purchase!\n\nOrder #: BBY01-123456789\nItem: MacBook Pro 16\" M3\nPrice: $2,499.00\nStore pickup: Best Buy - Downtown\nReady for pickup: Tomorrow after 2 PM\n\n[View Order Details]",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Best Buy domain, realistic product and pricing, specific order number, reasonable pickup timeframe, and standard order confirmation format."
+  },
+  {
+    "id": 21,
+    "scenario": "📱 WhatsApp from +44-7911-123456:\n\n\"Hello! I'm Sarah from the UK. I found your number online and I have a business proposal. I need someone in your country to receive $2.5 million inheritance money. You'll get 30% commission. Interested?\"",
+    "isScam": true,
+    "explanation": "🚨 Advance fee scam: Unsolicited contact, inheritance money story, too-good-to-be-true commission, and requesting help from strangers. Classic 419 scam pattern."
+  },
+  {
+    "id": 22,
+    "scenario": "📧 Email from: noreply@uber.com\n\nSubject: Trip Receipt - Thank you for riding with Uber\n\nTrip on March 10, 2024\nFrom: 123 Main St\nTo: Downtown Mall\nFare: $12.45\nDriver: Michael (4.9 ⭐)\n\n[Rate your trip] [Get receipt]",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Uber domain, realistic trip details and pricing, standard receipt format, and typical post-ride communication from Uber."
+  },
+  {
+    "id": 23,
+    "scenario": "💬 Instagram DM from @investment_guru_official:\n\n\"I noticed you follow finance accounts! 📈 I'm giving away my $2000 trading course for FREE to the first 50 people! Just pay $49 shipping for the physical materials. Link in bio! 🎁\"",
+    "isScam": true,
+    "explanation": "🚨 Fake giveaway scam: 'Free' course with shipping fees, artificial scarcity, and targeting based on interests. Digital courses don't need physical shipping."
+  },
+  {
+    "id": 24,
+    "scenario": "📧 Email from: support@dropbox.com\n\nSubject: Storage almost full\n\nYour Dropbox is 98% full (1.96 GB of 2 GB used).\n\nUpgrade to Dropbox Plus for 2TB of storage:\n• 2TB of space\n• 30-day file recovery\n• Priority support\n\n[Upgrade Now] → dropbox.com/upgrade",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Dropbox domain, realistic storage usage, standard upgrade offer with real features, and links to official Dropbox upgrade page."
+  },
+  {
+    "id": 25,
+    "scenario": "📱 Text from 555-0198:\n\n\"IRS NOTICE: You owe $3,247 in back taxes. Warrant issued for your arrest. Call 1-800-IRS-HELP immediately to avoid jail time. Case #: IRS-2024-7891\"",
+    "isScam": true,
+    "explanation": "🚨 IRS impersonation scam: IRS doesn't contact via text, doesn't threaten arrest, and doesn't demand immediate payment. Always contact IRS directly through official channels."
+  },
+  {
+    "id": 26,
+    "scenario": "📧 Email from: team@slack.com\n\nSubject: You've been added to StockVerse workspace\n\nYou've been invited to join the StockVerse team workspace on Slack.\n\nWorkspace: StockVerse\nInvited by: john.doe@stockverse.com\n\n[Join Workspace] [Decline Invitation]\n\nLinks lead to: slack.com/join/workspace",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Slack domain, realistic workspace invitation, professional format, and links to official Slack join page. Standard team invitation."
+  },
+  {
+    "id": 27,
+    "scenario": "💻 Website pop-up on news site:\n\n\"🎯 You've been selected for our exclusive survey! Answer 3 quick questions about your shopping habits and receive a $100 Amazon gift card! Survey expires in 5 minutes!\"\n\n[Start Survey] [Maybe Later]",
+    "isScam": true,
+    "explanation": "🚨 Survey scam: Fake selection, unrealistic reward for simple survey, artificial time pressure, and designed to collect personal information for identity theft."
+  },
+  {
+    "id": 28,
+    "scenario": "📧 Email from: billing@adobe.com\n\nSubject: Adobe Creative Cloud - Subscription Renewal\n\nYour Adobe Creative Cloud subscription will renew on March 20, 2024.\n\nPlan: Creative Cloud All Apps\nAmount: $52.99/month\nPayment method: •••• 4567\n\n[Manage subscription] → adobe.com/account",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Adobe domain, standard pricing, realistic renewal notice, partial card number display, and links to official Adobe account page."
+  },
+  {
+    "id": 29,
+    "scenario": "📱 WhatsApp from +1-555-0199:\n\n\"Hi! This is Jessica from Amazon customer service. We noticed unusual activity on your account. Someone tried to order a $1,200 iPhone. Please confirm your account details to secure it: Username, password, and last 4 digits of your card.\"",
+    "isScam": true,
+    "explanation": "🚨 Impersonation scam: Amazon doesn't contact via WhatsApp, requesting login credentials, and creating false urgency. Always contact Amazon through official channels."
+  },
+  {
+    "id": 30,
+    "scenario": "📧 Email from: no-reply@github.com\n\nSubject: New sign-in from Chrome on Windows\n\nSomeone just signed in to your GitHub account:\n\nBrowser: Chrome 122\nOS: Windows 11\nLocation: San Francisco, CA\nTime: March 10, 2024 at 3:22 PM PST\n\n[This was me] [This wasn't me]",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official GitHub domain, detailed sign-in information, realistic browser/OS details, and provides clear options to confirm or deny the sign-in."
+  },
+  {
+    "id": 31,
+    "scenario": "💬 Telegram message from @crypto_signals_vip:\n\n\"🚨 URGENT SIGNAL 🚨\nBuy DOGE now! Elon Musk will announce Tesla accepts Dogecoin in 2 hours! 🚀 This will pump 1000%! Send 1 ETH to our wallet for VIP access to more signals!\"\n\nWallet: 0x742d35Cc6634C0532925a3b8D4C0532925a3b8D4",
+    "isScam": true,
+    "explanation": "🚨 Pump and dump scam: False insider information, unrealistic returns, requesting crypto payment, and using celebrity names to create urgency and credibility."
+  },
+  {
+    "id": 32,
+    "scenario": "📧 Email from: noreply@linkedin.com\n\nSubject: You have 3 new messages\n\nHi [Your Name],\n\nYou have 3 new messages waiting in your LinkedIn inbox.\n\nFrom: Sarah Johnson, Marketing Director\nFrom: Tech Recruiter at Google\nFrom: Investment Opportunity\n\n[View Messages] → linkedin.com/messaging",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official LinkedIn domain, realistic message notifications, professional sender titles, and links to official LinkedIn messaging page."
+  },
+  {
+    "id": 33,
+    "scenario": "📱 SMS from 555-0201:\n\n\"CONGRATULATIONS! 🎉 You've won $50,000 in the Walmart Customer Appreciation Lottery! Claim your prize by calling 1-800-WIN-CASH and providing confirmation code: WM2024-7891. Expires in 24 hours!\"",
+    "isScam": true,
+    "explanation": "🚨 Fake lottery scam: Walmart doesn't run lotteries, unsolicited prize notification, artificial urgency, and requesting phone contact. Legitimate prizes don't expire in 24 hours."
+  },
+  {
+    "id": 34,
+    "scenario": "📧 Email from: security@microsoft.com\n\nSubject: Unusual sign-in activity\n\nWe detected an unusual sign-in to your Microsoft account:\n\nAccount: your.email@gmail.com\nLocation: Moscow, Russia\nDevice: Unknown device\nTime: Today at 11:47 PM\n\nIf this was you, no action needed.\nIf not: [Secure your account] → account.microsoft.com/security",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Microsoft domain, security notification format, specific details, provides option to ignore, and links to official Microsoft security page."
+  },
+  {
+    "id": 35,
+    "scenario": "💻 Browser notification:\n\n\"🔒 Your browser is out of date and vulnerable to attacks! Update now to protect your personal information. Click here to download the latest security update.\"\n\n[Update Browser] [Remind me later]\n\nLink leads to: browser-security-update.net",
+    "isScam": true,
+    "explanation": "🚨 Fake update scam: Suspicious domain (not official browser site), fear tactics about security, and browsers update automatically or through official channels."
+  },
+  {
+    "id": 36,
+    "scenario": "📧 Email from: orders@target.com\n\nSubject: Your Target order is ready for pickup!\n\nOrder #: 123-45-6789\nItems: Household essentials (5 items)\nTotal: $67.43\nStore: Target - Westfield Mall\nReady for pickup: Now\n\n[Pickup details] → target.com/orders",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Target domain, realistic order details, standard pickup notification format, and links to official Target orders page."
+  },
+  {
+    "id": 37,
+    "scenario": "📱 WhatsApp from +234-803-123-4567:\n\n\"Greetings! I am Prince Adebayo from Nigeria. I have $15 million trapped in a bank account. I need your help to transfer it to your country. You will receive 25% ($3.75 million) for your assistance. Are you interested?\"",
+    "isScam": true,
+    "explanation": "🚨 Classic Nigerian prince scam: Unsolicited contact, inheritance/trapped money story, too-good-to-be-true commission, and requesting help from strangers."
+  },
+  {
+    "id": 38,
+    "scenario": "📧 Email from: noreply@zoom.us\n\nSubject: Meeting reminder: Team Standup\n\nYou have a meeting starting in 15 minutes:\n\nTopic: Daily Team Standup\nTime: March 11, 2024 at 9:00 AM PST\nMeeting ID: 123-456-7890\nHost: Sarah Johnson\n\n[Join Meeting] → zoom.us/j/1234567890",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Zoom domain, realistic meeting details, standard reminder format, and links to official Zoom meeting join page."
+  },
+  {
+    "id": 39,
+    "scenario": "💬 Discord DM from @CryptoMaster2024:\n\n\"Hey! I saw your message in the crypto channel. I have insider info about a new coin launching tomorrow. It's going to 100x! Send me 0.5 ETH and I'll add you to the private presale. Only 24 hours left!\"",
+    "isScam": true,
+    "explanation": "🚨 Crypto investment scam: Unsolicited DM, insider information claims, unrealistic returns, requesting crypto payment, and artificial urgency. Legitimate investments don't work this way."
+  },
+  {
+    "id": 40,
+    "scenario": "📧 Email from: support@steam.com\n\nSubject: Steam Guard - New device authorization\n\nA new device is trying to access your Steam account:\n\nDevice: Windows PC\nLocation: Your City, Your State\nTime: March 11, 2024 at 7:23 PM\n\nIf this is you, enter this code: 7G4H9\nIf not, change your password: [Secure Account] → store.steampowered.com/account",
+    "isScam": false,
+    "explanation": "✅ Legitimate: Official Steam domain, Steam Guard security feature, realistic authorization process, provides security code, and links to official Steam account page."
+  }
+]
