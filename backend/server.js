@@ -1,12 +1,48 @@
 const express = require('express');
 const cors = require('cors');
+const admin = require('firebase-admin');
 
+// Initialize Firebase Admin
+// IMPORTANT: Set the GOOGLE_APPLICATION_CREDENTIALS environment variable
+// to the path of your service account key file.
+// For example: export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/key.json"
+admin.initializeApp({
+  credential: admin.credential.applicationDefault()
+});
+
+const db = admin.firestore();
 const app = express();
 const PORT = 3002;
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:8080', // Allow only the frontend to connect
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(express.json());
+
+let stockPrices = {};
+
+// Fetch prices from Firestore
+const fetchPricesFromFirestore = async () => {
+  try {
+    const stocksCollection = db.collection('stocks');
+    const snapshot = await stocksCollection.get();
+    const prices = {};
+    snapshot.forEach(doc => {
+      prices[doc.id] = doc.data();
+    });
+    stockPrices = prices;
+    console.log('Successfully fetched stock prices from Firestore:', stockPrices);
+  } catch (error) {
+    console.error('Error fetching stock prices from Firestore:', error);
+  }
+};
+
+// Fetch prices on startup and then every 5 minutes
+fetchPricesFromFirestore();
+setInterval(fetchPricesFromFirestore, 5 * 60 * 1000);
 
 // Live stock data with real-time price simulation
 const generateLivePrice = (basePrice, symbol) => {
@@ -24,51 +60,25 @@ const generateLivePrice = (basePrice, symbol) => {
   };
 };
 
-const basePrices = {
-  'RELIANCE': 2456.75,
-  'TCS': 3542.80,
-  'INFY': 1456.30,
-  'HDFCBANK': 1678.45
-};
-
-// Import the comprehensive stock data
-const indianStocks = [
-  { symbol: 'RELIANCE', name: 'Reliance Industries Ltd.', price: 2456.75 },
-  { symbol: 'TCS', name: 'Tata Consultancy Services Ltd.', price: 3542.80 },
-  { symbol: 'HDFCBANK', name: 'HDFC Bank Ltd.', price: 1678.45 },
-  { symbol: 'INFY', name: 'Infosys Ltd.', price: 1456.30 },
-  { symbol: 'ICICIBANK', name: 'ICICI Bank Ltd.', price: 1089.60 },
-  { symbol: 'HINDUNILVR', name: 'Hindustan Unilever Ltd.', price: 2387.90 },
-  { symbol: 'ITC', name: 'ITC Ltd.', price: 456.75 },
-  { symbol: 'SBIN', name: 'State Bank of India', price: 623.45 },
-  { symbol: 'BHARTIARTL', name: 'Bharti Airtel Ltd.', price: 1234.50 },
-  { symbol: 'KOTAKBANK', name: 'Kotak Mahindra Bank Ltd.', price: 1789.25 }
-];
-
-const stockDatabase = {};
-const priceDatabase = {};
-
-indianStocks.forEach(stock => {
-  stockDatabase[stock.symbol] = {
-    symbol: stock.symbol,
-    name: stock.name,
-    volume: `${(Math.random() * 5 + 0.5).toFixed(1)}M`,
-    high: stock.price * 1.02,
-    low: stock.price * 0.98,
-    open: stock.price * (0.99 + Math.random() * 0.02)
-  };
-  priceDatabase[stock.symbol] = stock.price;
-});
-
 const getStockData = (symbol) => {
-  const base = stockDatabase[symbol] || stockDatabase['RELIANCE'];
-  const basePrice = priceDatabase[symbol] || priceDatabase['RELIANCE'];
-  const priceData = generateLivePrice(basePrice, symbol);
+  const stock = stockPrices[symbol] || stockPrices[Object.keys(stockPrices)[0]];
+  if (!stock) {
+    return { error: 'Stock not found' };
+  }
+  const priceData = generateLivePrice(stock.price, symbol);
   
-  return { ...base, ...priceData };
+  return { ...stock, ...priceData };
 };
 
 // Routes
+app.get('/api/prices', (req, res) => {
+  const simulatedPrices = {};
+  for (const symbol in stockPrices) {
+    simulatedPrices[symbol] = getStockData(symbol);
+  }
+  console.log('Sending simulated prices:', simulatedPrices);
+  res.json(simulatedPrices);
+});
 
 // Get stock quote with live prices
 app.get('/api/stocks/:symbol', (req, res) => {
@@ -79,7 +89,7 @@ app.get('/api/stocks/:symbol', (req, res) => {
 
 // Get trending stocks with live prices
 app.get('/api/stocks', (req, res) => {
-  const allSymbols = Object.keys(stockDatabase);
+  const allSymbols = Object.keys(stockPrices);
   const randomTrending = allSymbols.sort(() => 0.5 - Math.random()).slice(0, 6);
   const trending = randomTrending.map(symbol => getStockData(symbol));
   res.json(trending);
@@ -108,5 +118,4 @@ app.post('/api/trade/sell', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 StockVerse Backend running on http://localhost:${PORT}`);
-  console.log('⚠️  Only stock data API available - Database not configured');
 });

@@ -2,7 +2,13 @@ import { collection, getCountFromServer } from 'firebase/firestore';
 import { db } from './firebase';
 
 export const getUserStats = async () => {
-  try {
+  // TODO: This should be implemented on the backend
+  console.warn('User stats are not being fetched from the backend. Returning dummy data.');
+  return {
+    totalUsers: 1000, // Dummy data
+    activeTraders: 500 // Dummy data
+  };
+  /* try {
     const usersCollection = collection(db, 'users');
     const snapshot = await getCountFromServer(usersCollection);
     return {
@@ -15,5 +21,5 @@ export const getUserStats = async () => {
       totalUsers: 0,
       activeTraders: 0
     };
-  }
+  } */
 };

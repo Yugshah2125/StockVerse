@@ -13,12 +13,7 @@ export interface StockData {
   open: number;
 }
 
-// Start Alpha Vantage daily system
-let systemStarted = false;
-if (!systemStarted) {
-  alphaVantageApi.startDailySystem();
-  systemStarted = true;
-}
+
 
 // Generate price data using Alpha Vantage baseline + simulation
 const generatePriceData = (symbol: string) => {

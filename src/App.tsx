@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "@/components/theme-provider";
 import "@/services/firebase"; // Force Firebase initialization
+import { alphaVantageApi } from "@/services/alphaVantageApi";
 import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";

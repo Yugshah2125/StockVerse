@@ -23,4 +23,4 @@ jobs:
         env:
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: node .github/scripts/fetch-stocks.js
+        run: node .github/scripts/fetch-stocks.cjs

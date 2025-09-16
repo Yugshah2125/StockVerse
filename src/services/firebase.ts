@@ -3,12 +3,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCmvj7fXTJSCHbRCRZyodK5UypTXLzTJ_E",
-  authDomain: "stockverse-d7432.firebaseapp.com",
-  projectId: "stockverse-d7432",
-  storageBucket: "stockverse-d7432.firebasestorage.app",
-  messagingSenderId: "253966024145",
-  appId: "1:253966024145:web:ab2a29df346126d3cc74f0"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 console.log('Firebase Config loaded successfully');
